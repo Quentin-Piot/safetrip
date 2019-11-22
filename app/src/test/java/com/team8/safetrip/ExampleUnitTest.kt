@@ -1,4 +1,4 @@
-package com.ingeance.safetrip
+package com.team8.safetrip
 
 import org.junit.Test
 
