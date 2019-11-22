@@ -102,6 +102,11 @@ class ShakeService : Service(), SensorEventListener {
         if(!mp.isPlaying)
 
             mp!!.start()
+        val intent = Intent(this, AlertActivity::class.java)
+
+
+        startActivity(intent)
+
 
     }
 

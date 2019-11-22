@@ -100,7 +100,7 @@ class Settings : AppCompatActivity() {
 
 
 
-    fun retrieveContactPhoto(number:String): Bitmap {
+    private fun retrieveContactPhoto(number:String): Bitmap {
         val contentResolver = this.contentResolver
         var contactId:String = ""
         val uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number))
@@ -155,7 +155,7 @@ class Settings : AppCompatActivity() {
     }
 
 
-    fun getData(){
+    private fun getData(){
         for (i in 0 until dataObj.contactList.size) {
             if(dataObj.contactList[i] != ""){
                 var number = dataObj.contactList[i]
