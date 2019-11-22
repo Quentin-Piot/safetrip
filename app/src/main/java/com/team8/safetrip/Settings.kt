@@ -15,7 +15,6 @@ import java.io.IOException
 
 
 class Settings : AppCompatActivity() {
-    private val TAG = "Contacts"
     private var dataObj = Data()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,28 +55,19 @@ class Settings : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // Check which request it is that we're responding to
-            // Make sure the request was successful
+
             if (resultCode == Activity.RESULT_OK) {
-                // We only need the NUMBER column, because there will be only one row in the result
                 val projection: Array<String> = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
 
-                // Get the URI that points to the selected contact
                 if (data != null) {
                     data.data?.also { contactUri ->
-                        // Perform the query on the contact to get the NUMBER column
-                        // We don't need a selection or sort order (there's only one result for this URI)
-                        // CAUTION: The query() method should be called from a separate thread to avoid
-                        // blocking your app's UI thread. (For simplicity of the sample, this code doesn't
-                        // do that.)
-                        // Consider using <code><a href="/reference/android/content/CursorLoader.html">CursorLoader</a></code> to perform the query.
+
                         contentResolver.query(contactUri, projection, null, null, null)?.apply {
                             moveToFirst()
 
                             // Retrieve the phone number from the NUMBER column
                             val column: Int = getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                             val number: String = getString(column)
-                            val contact = Contact(number)
                             var name : String = getContactName(number)
                             when (requestCode) {
                                 0 -> {
@@ -94,7 +84,6 @@ class Settings : AppCompatActivity() {
                                 }
                             }
                             dataObj.contactList[requestCode] = number
-                            println("fal : ${dataObj.contactList[0]}")
 
 
 

@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loadData()
+
         val intent = Intent(this, ShakeService::class.java)
 
 
@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
 
             startActivity(intentSettings)
 
-            println("start")
 
         }
 
@@ -69,18 +68,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun loadData(){
-        try {
-            val fis: FileInputStream = this.openFileInput("test.test")
-            val `is` = ObjectInputStream(fis)
-            val data: Data = `is`.readObject() as Data
-            `is`.close()
-            fis.close()
-            print("loaded")
-        }catch (e : Exception){
-        println(e.message)
-        }
-    }
 
 
 
