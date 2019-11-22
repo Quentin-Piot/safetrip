@@ -26,7 +26,13 @@ class ShakeService : Service(), SensorEventListener {
 
     private var count = 0
     private var startMillis: Long = 0
-    private  var  mp = MediaPlayer()
+
+    private var alarmActivated = false
+
+
+    companion object {
+        var  mp = MediaPlayer()
+    }
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
@@ -64,23 +70,17 @@ class ShakeService : Service(), SensorEventListener {
         //if it is the first time, or if it has been more than 3 seconds since the first tap ( so it is like a new try), we reset everything
 
 
-        if (mAccel > 7) {
+        if (mAccel > 7 && !alarmActivated) {
 
 
             if (startMillis == 0L || (time - startMillis > 250 && time -startMillis < 900)) {
                 startMillis = time
                 count++
-                println("count " + count)
+                println("count $count")
 
                 if (count >= 3) {
-                    val rnd = Random()
-                    val color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
-
-                    val intent = Intent("1")
-                    intent.putExtra("x", x)
 
                     ring()
-                    // sendBroadcast(intent)
 
 
 
@@ -96,12 +96,12 @@ class ShakeService : Service(), SensorEventListener {
 
 
     private fun ring(){
-
+        alarmActivated = true
         mp = MediaPlayer.create(this, R.raw.alarm)
 
-        if(!mp.isPlaying)
+        if(!mp.isPlaying) mp!!.start()
 
-            mp!!.start()
+
         val intent = Intent(this, AlertActivity::class.java)
 
 
@@ -109,5 +109,8 @@ class ShakeService : Service(), SensorEventListener {
 
 
     }
+
+
+
 
 }

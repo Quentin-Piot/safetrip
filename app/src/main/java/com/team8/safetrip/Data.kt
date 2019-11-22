@@ -4,18 +4,18 @@ import java.io.*
 import java.lang.Exception
 
 
-class  Data : Serializable {
+class Data : Serializable {
 
 
-    private  val serialVersionUID = 20180617104400L
+    private val serialVersionUID = 20180617104400L
 
-    var contactList: ArrayList<String> = arrayListOf("","","")
+    var contactList: ArrayList<String> = arrayListOf("", "", "")
 
-    init{
+    init {
         try {
             contactList = loadData().contactList
             println(contactList[0])
-        }catch(e :Exception){
+        } catch (e: Exception) {
             println(e.message)
         }
     }
@@ -37,7 +37,7 @@ class  Data : Serializable {
     }
 
 
-    fun loadData() : Data{
+    fun loadData(): Data {
         val dirPath = "sdcard/safetrip"
         val filepath = "bonsoir.tp"
 
