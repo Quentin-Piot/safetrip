@@ -9,9 +9,11 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.IOException
+import java.lang.Exception
 
 
 class Settings : AppCompatActivity() {
@@ -37,8 +39,19 @@ class Settings : AppCompatActivity() {
 
         saveSettings.setOnClickListener {
 
+            if(oldpassword.text.toString() == dataObj.password){
+                if(newpassord.text.toString().length == 4){
+                    dataObj.password = newpassord.text.toString()
+                }
+            }
             dataObj.saveData()
 
+
+
+            val duration = Toast.LENGTH_SHORT
+
+            val toast = Toast.makeText(applicationContext, "Data Saved", duration)
+            toast.show()
         }
     }
 
@@ -73,16 +86,33 @@ class Settings : AppCompatActivity() {
                         when (requestCode) {
                             0 -> {
                                 nameContact1.text = name
+                                try {
+
+
                                 contact1.setImageBitmap(retrieveContactPhoto(number))
+                                }catch(e : Exception){
+
+                                }
                             }
                             1 -> {
                                 nameContact2.text = name
-                                contact2.setImageBitmap(retrieveContactPhoto(number))
-                            }
+                                try {
+
+
+                                    contact2.setImageBitmap(retrieveContactPhoto(number))
+                                }catch(e : Exception){
+
+                                }                            }
                             else -> {
                                 nameContact3.text = name
-                                contact3.setImageBitmap(retrieveContactPhoto(number))
-                            }
+
+                                try {
+
+
+                                    contact3.setImageBitmap(retrieveContactPhoto(number))
+                                }catch(e : Exception){
+
+                                }                            }
                         }
                         dataObj.contactList[requestCode] = number
 
@@ -169,19 +199,37 @@ class Settings : AppCompatActivity() {
                 when (i) {
                     0 -> {
                         nameContact1.text = name
-                        contact1.setImageBitmap(retrieveContactPhoto(number))
-                    }
+                        try {
+
+
+                            contact1.setImageBitmap(retrieveContactPhoto(number))
+                        }catch(e : Exception){
+
+                        }                    }
                     1 -> {
                         nameContact2.text = name
-                        contact2.setImageBitmap(retrieveContactPhoto(number))
-                    }
+                        try {
+
+
+                            contact2.setImageBitmap(retrieveContactPhoto(number))
+                        }catch(e : Exception){
+
+                        }                    }
                     else -> {
                         nameContact3.text = name
-                        contact3.setImageBitmap(retrieveContactPhoto(number))
-                    }
+                        try {
+
+
+                            contact3.setImageBitmap(retrieveContactPhoto(number))
+                        }catch(e : Exception){
+
+                        }                    }
                 }
             }
         }
+
+
+
 
 
     }

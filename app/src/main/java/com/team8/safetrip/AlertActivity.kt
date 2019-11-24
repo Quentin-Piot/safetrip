@@ -105,7 +105,9 @@ class AlertActivity : AppCompatActivity() {
     }
 
     private fun checkPassword() {
-        if (password.text == "0000") {
+        val data = Data().loadData()
+        val pass = data.password
+        if (password.text == pass) {
 
             ShakeService.mp.stop()
             this.finish()
@@ -113,7 +115,6 @@ class AlertActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val text = "Hello toast!"
         val duration = Toast.LENGTH_SHORT
 
         val toast = Toast.makeText(applicationContext, "Please use your password", duration)

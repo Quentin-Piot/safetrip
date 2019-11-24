@@ -10,11 +10,14 @@ class Data : Serializable {
     private val serialVersionUID = 20180617104400L
 
     var contactList: ArrayList<String> = arrayListOf("", "", "")
+    var password : String = "0000"
 
     init {
         try {
             contactList = loadData().contactList
-            println(contactList[0])
+            password = loadData().password
+            println(password)
+           // println(contactList[0])
         } catch (e: Exception) {
             println(e.message)
         }
