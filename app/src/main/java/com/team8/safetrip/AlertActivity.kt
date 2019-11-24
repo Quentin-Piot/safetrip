@@ -1,6 +1,7 @@
 package com.team8.safetrip
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_alert.*
@@ -13,6 +14,7 @@ class AlertActivity : AppCompatActivity() {
         setContentView(R.layout.activity_alert)
 
 
+        setTimer()
 
         button0.setOnClickListener {
 
@@ -104,6 +106,20 @@ class AlertActivity : AppCompatActivity() {
 
     }
 
+
+    private fun setTimer(){
+        object : CountDownTimer(10000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timer.text = (millisUntilFinished / 1000).toString()
+            }
+
+            override fun onFinish() {
+                timer.text = "Contacts warned"
+                contactRelatives()
+            }
+        }.start()
+
+    }
     private fun checkPassword() {
         val data = Data().loadData()
         val pass = data.password
@@ -119,6 +135,13 @@ class AlertActivity : AppCompatActivity() {
 
         val toast = Toast.makeText(applicationContext, "Please use your password", duration)
         toast.show()
+
+    }
+
+
+    private fun contactRelatives(){
+
+
 
     }
 }
