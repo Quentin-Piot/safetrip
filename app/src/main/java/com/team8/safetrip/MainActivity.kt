@@ -21,6 +21,11 @@ import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.TextView
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(){
@@ -29,6 +34,10 @@ class MainActivity : AppCompatActivity(){
     private lateinit var serviceFall: Intent
     private lateinit var serviceShake: Intent
     private lateinit var activityRecognition: Intent
+    private lateinit var battery: Intent
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +62,11 @@ class MainActivity : AppCompatActivity(){
         activityRecognition = Intent(this, ActivityRecognitionService::class.java)
         startService(activityRecognition)
 
+        battery = Intent(this, BatteryService::class.java)
+        startService(battery)
+
+
+
 
 
 
@@ -67,12 +81,15 @@ class MainActivity : AppCompatActivity(){
 
     }
 
+
+
     override fun onDestroy() {
         super.onDestroy()
         stopService(serviceLocalisation)
         stopService(serviceFall)
         stopService(serviceShake)
         stopService(activityRecognition)
+        stopService(battery)
     }
 
 
