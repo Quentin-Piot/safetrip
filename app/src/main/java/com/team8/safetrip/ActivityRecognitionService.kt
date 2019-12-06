@@ -5,9 +5,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+
 import android.widget.Toast
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
@@ -69,10 +67,9 @@ class ActivityRecognitionService : Service() {
 
     var detectedActivity = intArrayOf(
         DetectedActivity.IN_VEHICLE,
-        DetectedActivity.ON_BICYCLE,  // DetectedActivity.ON_FOOT,
+        DetectedActivity.ON_BICYCLE,
         DetectedActivity.RUNNING,
-        DetectedActivity.STILL,  // DetectedActivity.TILTING,
-// DetectedActivity.UNKNOWN,
+        DetectedActivity.STILL,
         DetectedActivity.WALKING
     )
 
@@ -112,6 +109,31 @@ class ActivityRecognitionService : Service() {
         transitions.add(
             ActivityTransition.Builder()
                 .setActivityType(DetectedActivity.STILL)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                .build()
+        )
+        transitions.add(
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.ON_BICYCLE)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                .build()
+        )
+        transitions.add(
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.ON_BICYCLE)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                .build()
+        )
+
+        transitions.add(
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.RUNNING)
+                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                .build()
+        )
+        transitions.add(
+            ActivityTransition.Builder()
+                .setActivityType(DetectedActivity.RUNNING)
                 .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
                 .build()
         )
