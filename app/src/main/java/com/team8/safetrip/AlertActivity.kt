@@ -132,7 +132,7 @@ class AlertActivity : AppCompatActivity() {
         val data = Data().loadData()
         val pass = data.password
         if (password.text == pass) {
-
+            mp!!.stop()
             ShakeService.alarmActivated = false
             this.finish()
         }

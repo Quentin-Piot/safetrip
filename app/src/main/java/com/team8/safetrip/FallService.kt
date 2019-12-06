@@ -1,5 +1,5 @@
 package com.team8.safetrip
-/*
+
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -38,6 +38,7 @@ class FallService : Service(), SensorEventListener {
     private var gyroscopeY: MutableList<Float> = ArrayList()
     private var gyroscopeZ: MutableList<Float> = ArrayList()
 
+    private var alarmActivated = false
     private val myTag = "InsideService"
 
     override fun onBind(intent: Intent): IBinder? {
@@ -92,7 +93,7 @@ class FallService : Service(), SensorEventListener {
             instance.setDataset(instances)
             val predictedClass = classifier.predict(instance)
             Log.d(myTag, "Prediction successful. Result: $predictedClass")
-            if (predictedClass == "fall")
+            if (predictedClass == "fall" && !alarmActivated)
                 broadcast()
             clearData()
         }
@@ -100,10 +101,15 @@ class FallService : Service(), SensorEventListener {
 
     private fun broadcast()
     {
+        alarmActivated = true
+        val intent = Intent(this, AlertActivity::class.java)
+        startActivity(intent)
+/*
         Log.d(myTag, "broadcast entered")
         val intent = Intent()
         intent.action = "testing_action"
         sendBroadcast(intent)
+ */
     }
 
 
@@ -181,4 +187,3 @@ class FallService : Service(), SensorEventListener {
         gyroscopeZ.clear()
     }
 }
-*/

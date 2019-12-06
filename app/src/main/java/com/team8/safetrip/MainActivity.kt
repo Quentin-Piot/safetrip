@@ -24,6 +24,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(){
 
+    private lateinit var serviceLocalisation: Intent
+    private lateinit var serviceFall: Intent
+    private lateinit var serviceShake: Intent
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,21 +36,18 @@ class MainActivity : AppCompatActivity(){
         showNotification()
 
 
-
         LocalBroadcastManager.getInstance(this).registerReceiver(
             mMessageReceiver,  IntentFilter("intentKey"));
 
-        val serviceLocalisation = Intent(this, LocalisationService::class.java)
-
-
+        serviceLocalisation = Intent(this, LocalisationService::class.java)
         startService(serviceLocalisation)
 
+        serviceFall = Intent(this, FallService::class.java)
+        startService(serviceFall)
 
 
-        val intent = Intent(this, ShakeService::class.java)
-
-
-        startService(intent)
+        serviceShake = Intent(this, ShakeService::class.java)
+        startService(serviceShake)
 
         val activityRecognition = Intent(this, ActivityRecognitionService::class.java)
         startService(activityRecognition)
@@ -65,9 +66,26 @@ class MainActivity : AppCompatActivity(){
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        stopService(serviceLocalisation)
+        stopService(serviceFall)
+        stopService(serviceShake)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        startService(serviceLocalisation)
+        startService(serviceFall)
+        startService(serviceShake)
+    }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService(serviceLocalisation)
+        stopService(serviceFall)
+        stopService(serviceShake)
+    }
 
 
 
