@@ -10,22 +10,21 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="56dp"
         android:text="Activity Logs"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="36sp"
-        android:scrollbars = "vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/settingsButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="41dp"
+        android:layout_height="42dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="28dp"
-        android:layout_marginRight="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_manage" />
@@ -34,25 +33,51 @@
         android:id="@+id/locationT"
         android:layout_width="900px"
         android:layout_height="200px"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginBottom="84dp"
+        android:layout_marginBottom="132dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/logs"
-        android:layout_width="900px"
-        android:layout_height="900px"
+    <ScrollView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_marginTop="28dp"
-        android:text="Logs"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.453"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/logs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="28dp"
+                android:fadeScrollbars="false"
+                android:scrollbars="vertical"
+                android:text="Logs"
+
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/currentAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/locationT"
+        app:layout_constraintStart_toStartOf="@+id/locationT"
+        app:layout_constraintTop_toBottomOf="@+id/locationT" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

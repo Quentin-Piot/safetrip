@@ -55,7 +55,7 @@ class LocalisationService  : Service() {
                 }
             },  //Set how long before to start calling the TimerTask (in milliseconds)
             0,  //Set the amount of time between each execution (in milliseconds)
-            10000
+            20000
         )
 
 
@@ -105,19 +105,25 @@ class LocalisationService  : Service() {
             val mLastLocation = locationResult.lastLocation
             latitude = mLastLocation.latitude
             longitude = mLastLocation.longitude
-            val addresses: List<Address> = geocoder.getFromLocation(
-                latitude,
-                longitude
-                ,
-                1
-            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            try {
+                val addresses: List<Address> = geocoder.getFromLocation(
+                    latitude,
+                    longitude
+                    ,
+                    1
+                ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
 
-            val address: String = addresses[0]
-                .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                val address: String = addresses[0]
+                    .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-            location = "Location : $address"
-            sendMessageToActivity("UpdateLocation")
+                location = "Location : $address"
+                sendMessageToActivity("UpdateLocation")
+            }catch (e : Exception){
+                Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
+
+
+            }
         }
     }
 

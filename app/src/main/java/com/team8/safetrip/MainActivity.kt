@@ -173,9 +173,10 @@ class MainActivity : AppCompatActivity(){
             val message = intent.getStringExtra("key")
             if(message == "UpdateLocation"){
 
-                locationT.text = LocalisationService.location.toString()
+                locationT.text = LocalisationService.location
             }else if(message == "UpdateLogs"){
                 logs.text = TransitionBroadcastReceiver.logs
+                currentAct.text = "Current activity : ${TransitionBroadcastReceiver.currentActivity}"
             }
         }
     }

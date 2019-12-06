@@ -9,6 +9,7 @@ import com.google.android.gms.location.ActivityTransitionResult
 class TransitionBroadcastReceiver : BroadcastReceiver() {
     companion object {
         var logs : String =  ""
+        var currentActivity : String = "STILL"
     }
     private lateinit var context : Context
     override fun onReceive(context: Context, intent: Intent) {
@@ -25,6 +26,7 @@ class TransitionBroadcastReceiver : BroadcastReceiver() {
 
     private fun saveActivity(event: ActivityTransitionEventWrapper) {
         logs += "\n ${event.eventDisplayFormat}"
+        currentActivity = event.activityName
         sendMessageToActivity("UpdateLogs")
     }
 
