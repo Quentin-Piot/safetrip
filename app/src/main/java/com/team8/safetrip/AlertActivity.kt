@@ -16,6 +16,7 @@ class AlertActivity : AppCompatActivity() {
 
         setTimer()
 
+        locationT.text = "Location : " + LocalisationService.latitude
         button0.setOnClickListener {
 
             if (password.length() < 4) {
@@ -76,6 +77,8 @@ class AlertActivity : AppCompatActivity() {
 
             if (password.length() < 4) {
                 password.text = password.text.toString().plus("7")
+                checkPassword()
+
             }
         }
 

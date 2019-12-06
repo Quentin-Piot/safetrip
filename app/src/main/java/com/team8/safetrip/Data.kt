@@ -34,7 +34,7 @@ class Data : Serializable {
         }
         val file = File("$dirPath/$filepath")
 
-        val oos = ObjectOutputStream(FileOutputStream(file))
+        val oos = ObjectOutputStream(FileOutputStream(file) as OutputStream?)
 
         oos.writeObject(this)
     }

@@ -2,33 +2,44 @@ package com.team8.safetrip
 
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupPermissions()
+        showNotification()
 
+
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            mMessageReceiver,  IntentFilter("intentKey"));
 
         val serviceLocalisation = Intent(this, LocalisationService::class.java)
 
 
         startService(serviceLocalisation)
+
 
 
         val intent = Intent(this, ShakeService::class.java)
@@ -51,30 +62,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private val br = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-
-            val bundle = intent.extras
-            if (bundle != null) {
 
 
-            }
-        }
-    }
 
-    override fun onResume() {
-        // TODO Auto-generated method stub
-        super.onResume()
-        registerReceiver(br, IntentFilter("1"))
-
-    }
-
-    override fun onPause() {
-        // TODO Auto-generated method stub
-        super.onPause()
-        unregisterReceiver(br)
-    }
 
 
     private fun setupPermissions() {
@@ -142,6 +132,51 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
+    private fun showNotification() {
+        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("YOUR_CHANNEL_ID",
+                "YOUR_CHANNEL_NAME",
+                NotificationManager.IMPORTANCE_DEFAULT)
+            channel.description = "YOUR_NOTIFICATION_CHANNEL_DISCRIPTION"
+            mNotificationManager.createNotificationChannel(channel)
+        }
+        val mBuilder = NotificationCompat.Builder(applicationContext, "YOUR_CHANNEL_ID")
+            .setSmallIcon(R.drawable.ic_notification_icon) // notification icon
+            .setContentTitle("Safe Trip is activated") // title for notification
+            .setContentText("Safe Trip is running in background, you're safe to go home")// message for notification
+            .setVisibility(VISIBILITY_PUBLIC)
+            .setStyle(NotificationCompat.BigTextStyle()
+                .bigText("Safe Trip is running in background, you're safe to go home"))
+
+            // clear notification after click
+            .setAutoCancel(false)
+            .setOngoing(true);
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        mBuilder.setContentIntent(pi)
+        mNotificationManager.notify(0, mBuilder.build())
+    }
+
+
+    private val mMessageReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(
+            context: Context,
+            intent: Intent
+        ) { // Get extra data included in the Intent
+            val message = intent.getStringExtra("key")
+            if(message == "UpdateLocation"){
+
+                locationT.text = LocalisationService.location.toString()
+            }
+        }
+    }
+
+
+
+
 
 
 }
