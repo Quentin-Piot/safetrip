@@ -20,6 +20,12 @@ internal class ActivityTransitionEventWrapper(private val event: ActivityTransit
             return text
         }
 
+    val activityName: String
+        get() {
+            // text += event.getElapsedRealTimeNanos() +"\n";
+            return "" + getActivityTypeDesc(event.activityType)
+        }
+
     private fun convertTime(time: Long): String {
         val date = Date(time)
         val format: Format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
