@@ -1,5 +1,6 @@
 package com.team8.safetrip
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Toast
@@ -9,9 +10,13 @@ import kotlinx.android.synthetic.main.activity_alert.*
 
 class AlertActivity : AppCompatActivity() {
 
+    private lateinit var mp : MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alert)
+        mp = MediaPlayer.create(this, R.raw.alarm)
+        mp.isLooping = true
+        if(!mp.isPlaying) mp!!.start()
 
 
         setTimer()
@@ -128,7 +133,7 @@ class AlertActivity : AppCompatActivity() {
         val pass = data.password
         if (password.text == pass) {
 
-            ShakeService.mp.stop()
+            ShakeService.alarmActivated = false
             this.finish()
         }
     }

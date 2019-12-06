@@ -27,11 +27,11 @@ class ShakeService : Service(), SensorEventListener {
     private var count = 0
     private var startMillis: Long = 0
 
-    private var alarmActivated = false
+
 
 
     companion object {
-        var  mp = MediaPlayer()
+        var alarmActivated = false
     }
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -97,9 +97,6 @@ class ShakeService : Service(), SensorEventListener {
 
     private fun ring(){
         alarmActivated = true
-        mp = MediaPlayer.create(this, R.raw.alarm)
-
-        if(!mp.isPlaying) mp!!.start()
 
 
         val intent = Intent(this, AlertActivity::class.java)
