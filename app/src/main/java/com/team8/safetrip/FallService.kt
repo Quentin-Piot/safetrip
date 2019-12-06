@@ -24,7 +24,7 @@ class FallService : Service(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var mGyroscope: Sensor? = null
     private var mAccelerometer: Sensor? = null
-    private val numFeature = 30
+    private val numFeature = 36
     private val listFeature = List(numFeature) { i -> "f$i" } //{"f0", "f1", "f2", "f3"}
     private val listClass = arrayOf("other", "fall")
     private var instances = createEmptyInstances()
@@ -42,13 +42,11 @@ class FallService : Service(), SensorEventListener {
     private val myTag = "InsideService"
 
     override fun onBind(intent: Intent): IBinder? {
-        Log.d(myTag, "onBind entered")
         return null
     }
 
     override fun onCreate() {
         super.onCreate()
-        Log.d(myTag, "onCreate entered")
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
@@ -67,7 +65,6 @@ class FallService : Service(), SensorEventListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(myTag, "onDestroyed entered")
         sensorManager.unregisterListener(this)
     }
 
@@ -92,7 +89,6 @@ class FallService : Service(), SensorEventListener {
             val instance = createInstance()
             instance.setDataset(instances)
             val predictedClass = classifier.predict(instance)
-            Log.d(myTag, "Prediction successful. Result: $predictedClass")
             if (predictedClass == "fall" && !alarmActivated)
                 broadcast()
             clearData()
@@ -138,12 +134,14 @@ class FallService : Service(), SensorEventListener {
             accelerometerX.min()!!.toDouble(), accelerometerX.min()!!.toDouble(), accelerometerX.min()!!.toDouble(),
             accelerometerX.average(), accelerometerY.average(), accelerometerZ.average(),
             variance(accelerometerX), variance(accelerometerY), variance(accelerometerZ),
-            standardVariation(accelerometerX), standardVariation(accelerometerY), standardVariation(accelerometerZ),
+            standardDeviation(accelerometerX), standardDeviation(accelerometerY), standardDeviation(accelerometerZ),
+            median(accelerometerX), median(accelerometerY), median(accelerometerZ),
             gyroscopeX.max()!!.toDouble(), gyroscopeY.max()!!.toDouble(), gyroscopeZ.max()!!.toDouble(),
             gyroscopeX.min()!!.toDouble(), gyroscopeY.min()!!.toDouble(), gyroscopeZ.min()!!.toDouble(),
             gyroscopeX.average(), gyroscopeY.average(), gyroscopeZ.average(),
             variance(gyroscopeX), variance(gyroscopeY), variance(gyroscopeZ),
-            standardVariation(gyroscopeX), standardVariation(gyroscopeY), standardVariation(gyroscopeZ))
+            standardDeviation(gyroscopeX), standardDeviation(gyroscopeY), standardDeviation(gyroscopeZ),
+            median(gyroscopeX), median(gyroscopeY), median(gyroscopeZ))
 
         val attrClass = instances.attribute("label")
         val instance = Instance(numFeature + 1)
@@ -157,8 +155,7 @@ class FallService : Service(), SensorEventListener {
 
     private fun loadInstances() {
         val assetManager = resources.assets
-        // instances = Instances(BufferedReader(assetManager.open("myModel.arff").bufferedReader()))
-        instances = Instances(BufferedReader(assetManager.open("shake_gives_fall.arff").bufferedReader()))
+        instances = Instances(BufferedReader(assetManager.open("demo.arff").bufferedReader()))
         val attrClass = instances.attribute("label")
         instances.setClass(attrClass)
         classifier.train(instances)
@@ -174,8 +171,18 @@ class FallService : Service(), SensorEventListener {
         return (tempList.sum()/(tempList.size-1)).toDouble()
     }
 
-    private fun standardVariation(value: MutableList<Float>): Double {
+    private fun standardDeviation(value: MutableList<Float>): Double {
         return sqrt(variance(value))
+    }
+
+    private fun median(value: MutableList<Float>): Double {
+        value.sort()
+        return if (value.size%2 != 0) {
+            val  middle = value.size/2
+            ((value[middle] + value[middle-1])/2).toDouble()
+        } else {
+            value[(value.size-1)/2].toDouble()
+        }
     }
 
     private fun clearData() {
