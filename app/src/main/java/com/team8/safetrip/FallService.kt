@@ -9,6 +9,8 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.team8.safetrip.ShakeService.Companion.alarmActivated
 import weka.core.Attribute
 import weka.core.FastVector
 import weka.core.Instance
@@ -38,13 +40,13 @@ class FallService : Service(), SensorEventListener {
     private var gyroscopeY: MutableList<Float> = ArrayList()
     private var gyroscopeZ: MutableList<Float> = ArrayList()
 
-    private var alarmActivated = false
 
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onCreate() {
+        super.onCreate()
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
         mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -58,7 +60,6 @@ class FallService : Service(), SensorEventListener {
 
         loadInstances()
 
-        return Service.START_STICKY
     }
 
     override fun onDestroy() {
@@ -72,7 +73,6 @@ class FallService : Service(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         val sensor = event.sensor
-
         if (sensor.type == Sensor.TYPE_ACCELEROMETER) {
             accelerometerX.add(event.values[0])
             accelerometerY.add(event.values[1])
@@ -87,24 +87,18 @@ class FallService : Service(), SensorEventListener {
             val instance = createInstance()
             instance.setDataset(instances)
             val predictedClass = classifier.predict(instance)
+            //Log.d("FALLSERVICE", "predicted class: $predictedClass")
             if (predictedClass == "fall" && !alarmActivated)
-                broadcast()
+                ring()
             clearData()
         }
     }
 
-    private fun broadcast()
+    private fun ring()
     {
-        Log.d("FALLSERVICE", "broadcast entered")
         alarmActivated = true
         val intent = Intent(this, AlertActivity::class.java)
         startActivity(intent)
-/*
-        Log.d(myTag, "broadcast entered")
-        val intent = Intent()
-        intent.action = "testing_action"
-        sendBroadcast(intent)
- */
     }
 
 

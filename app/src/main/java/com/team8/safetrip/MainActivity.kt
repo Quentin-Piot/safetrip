@@ -38,20 +38,20 @@ class MainActivity : AppCompatActivity(){
         showNotification()
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
-            mMessageReceiver,  IntentFilter("intentKey"));
+            mMessageReceiver,  IntentFilter("intentKey"))
 
         serviceLocalisation = Intent(this, LocalisationService::class.java)
-        //startService(serviceLocalisation)
+        startService(serviceLocalisation)
 
         serviceFall = Intent(this, FallService::class.java)
-        //startService(serviceFall)
+        startService(serviceFall)
 
 
         serviceShake = Intent(this, ShakeService::class.java)
-        //startService(serviceShake)
+        startService(serviceShake)
 
         activityRecognition = Intent(this, ActivityRecognitionService::class.java)
-        //startService(activityRecognition)
+        startService(activityRecognition)
 
 
 
@@ -65,22 +65,6 @@ class MainActivity : AppCompatActivity(){
         }
 
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-        stopService(serviceLocalisation)
-        stopService(serviceFall)
-        stopService(serviceShake)
-        stopService(activityRecognition)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        startService(serviceLocalisation)
-        startService(serviceFall)
-        startService(serviceShake)
-        startService(activityRecognition)
     }
 
     override fun onDestroy() {
@@ -193,10 +177,8 @@ class MainActivity : AppCompatActivity(){
             intent: Intent
         ) { // Get extra data included in the Intent
             val message = intent.getStringExtra("key")
-            if(message == "UpdateLocation"){
-
-                locationT.text = LocalisationService.location
-            }else if(message == "UpdateLogs"){
+            if (message == "UpdateLocation") locationT.text = LocalisationService.location
+            else if (message == "UpdateLogs") {
                 logs.text = TransitionBroadcastReceiver.logs
                 currentAct.text = "Current activity : ${TransitionBroadcastReceiver.currentActivity}"
             }
