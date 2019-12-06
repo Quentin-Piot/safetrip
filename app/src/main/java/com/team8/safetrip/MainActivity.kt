@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
         setupPermissions()
         showNotification()
@@ -46,6 +47,9 @@ class MainActivity : AppCompatActivity(){
 
 
         startService(intent)
+
+        val activityRecognition = Intent(this, ActivityRecognitionService::class.java)
+        startService(activityRecognition)
 
 
 
@@ -170,6 +174,8 @@ class MainActivity : AppCompatActivity(){
             if(message == "UpdateLocation"){
 
                 locationT.text = LocalisationService.location.toString()
+            }else if(message == "UpdateLogs"){
+                logs.text = TransitionBroadcastReceiver.logs
             }
         }
     }
