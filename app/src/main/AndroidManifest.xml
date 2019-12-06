@@ -37,6 +37,7 @@
         <service android:name=".ShakeService" />
         <service android:name=".LocalisationService" />
         <service android:name=".ActivityRecognitionService" />
+        <service android:name=".FallService"/>
 
         <receiver android:name=".TransitionBroadcastReceiver"/>
 

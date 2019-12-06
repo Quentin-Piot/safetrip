@@ -12,6 +12,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(){
     private lateinit var serviceLocalisation: Intent
     private lateinit var serviceFall: Intent
     private lateinit var serviceShake: Intent
+    private lateinit var activityRecognition: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,22 +37,21 @@ class MainActivity : AppCompatActivity(){
         setupPermissions()
         showNotification()
 
-
         LocalBroadcastManager.getInstance(this).registerReceiver(
             mMessageReceiver,  IntentFilter("intentKey"));
 
         serviceLocalisation = Intent(this, LocalisationService::class.java)
-        startService(serviceLocalisation)
+        //startService(serviceLocalisation)
 
         serviceFall = Intent(this, FallService::class.java)
-        startService(serviceFall)
+        //startService(serviceFall)
 
 
         serviceShake = Intent(this, ShakeService::class.java)
-        startService(serviceShake)
+        //startService(serviceShake)
 
-        val activityRecognition = Intent(this, ActivityRecognitionService::class.java)
-        startService(activityRecognition)
+        activityRecognition = Intent(this, ActivityRecognitionService::class.java)
+        //startService(activityRecognition)
 
 
 
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity(){
         stopService(serviceLocalisation)
         stopService(serviceFall)
         stopService(serviceShake)
+        stopService(activityRecognition)
     }
 
     override fun onResume() {
@@ -78,6 +80,7 @@ class MainActivity : AppCompatActivity(){
         startService(serviceLocalisation)
         startService(serviceFall)
         startService(serviceShake)
+        startService(activityRecognition)
     }
 
     override fun onDestroy() {
@@ -85,6 +88,7 @@ class MainActivity : AppCompatActivity(){
         stopService(serviceLocalisation)
         stopService(serviceFall)
         stopService(serviceShake)
+        stopService(activityRecognition)
     }
 
 

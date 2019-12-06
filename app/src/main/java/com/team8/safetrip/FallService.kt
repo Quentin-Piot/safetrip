@@ -39,15 +39,12 @@ class FallService : Service(), SensorEventListener {
     private var gyroscopeZ: MutableList<Float> = ArrayList()
 
     private var alarmActivated = false
-    private val myTag = "InsideService"
 
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
-    override fun onCreate() {
-        super.onCreate()
-
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
         mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -61,6 +58,7 @@ class FallService : Service(), SensorEventListener {
 
         loadInstances()
 
+        return Service.START_STICKY
     }
 
     override fun onDestroy() {
@@ -97,6 +95,7 @@ class FallService : Service(), SensorEventListener {
 
     private fun broadcast()
     {
+        Log.d("FALLSERVICE", "broadcast entered")
         alarmActivated = true
         val intent = Intent(this, AlertActivity::class.java)
         startActivity(intent)
