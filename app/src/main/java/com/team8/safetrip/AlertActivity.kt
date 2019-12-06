@@ -11,11 +11,15 @@ import kotlinx.android.synthetic.main.activity_alert.*
 class AlertActivity : AppCompatActivity() {
 
     private lateinit var mp : MediaPlayer
+    private lateinit var data : Data
+    private lateinit var pass : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alert)
         mp = MediaPlayer.create(this, R.raw.alarm)
         mp.isLooping = true
+        data = Data().loadData()
+        pass = data.password
         if(!mp.isPlaying) mp!!.start()
 
 
@@ -129,11 +133,11 @@ class AlertActivity : AppCompatActivity() {
 
     }
     private fun checkPassword() {
-        val data = Data().loadData()
-        val pass = data.password
+
         if (password.text == pass) {
 
             ShakeService.alarmActivated = false
+            mp.stop()
             this.finish()
         }
     }
