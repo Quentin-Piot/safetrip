@@ -11,6 +11,7 @@ import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.IBinder
+import android.util.Log
 
 import java.util.Random
 
@@ -38,7 +39,6 @@ class ShakeService : Service(), SensorEventListener {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mAccelerometer = mSensorManager!!
             .getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -46,6 +46,11 @@ class ShakeService : Service(), SensorEventListener {
             SensorManager.SENSOR_DELAY_UI, Handler())
 
         return Service.START_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mSensorManager?.unregisterListener(this)
     }
 
 

@@ -1,5 +1,5 @@
 package com.team8.safetrip
-/*
+
 import weka.classifiers.bayes.NaiveBayes
 import weka.classifiers.bayes.BayesNet
 import weka.classifiers.trees.J48
@@ -60,4 +60,3 @@ class ClassifierWrapper {
         train(data)
     }
 }
-*/

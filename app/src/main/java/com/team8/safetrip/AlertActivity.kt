@@ -135,9 +135,8 @@ class AlertActivity : AppCompatActivity() {
     private fun checkPassword() {
 
         if (password.text == pass) {
-
+            mp!!.stop()
             ShakeService.alarmActivated = false
-            mp.stop()
             this.finish()
         }
     }

@@ -12,6 +12,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,9 +21,23 @@ import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.TextView
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(){
+
+    private lateinit var serviceLocalisation: Intent
+    private lateinit var serviceFall: Intent
+    private lateinit var serviceShake: Intent
+    private lateinit var activityRecognition: Intent
+    private lateinit var battery: Intent
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,25 +46,26 @@ class MainActivity : AppCompatActivity(){
         setupPermissions()
         showNotification()
 
-
-
         LocalBroadcastManager.getInstance(this).registerReceiver(
-            mMessageReceiver,  IntentFilter("intentKey"));
+            mMessageReceiver,  IntentFilter("intentKey"))
 
-        val serviceLocalisation = Intent(this, LocalisationService::class.java)
-
-
+        serviceLocalisation = Intent(this, LocalisationService::class.java)
         startService(serviceLocalisation)
 
+        serviceFall = Intent(this, FallService::class.java)
+        startService(serviceFall)
 
 
-        val intent = Intent(this, ShakeService::class.java)
+        serviceShake = Intent(this, ShakeService::class.java)
+        startService(serviceShake)
 
-
-        startService(intent)
-
-        val activityRecognition = Intent(this, ActivityRecognitionService::class.java)
+        activityRecognition = Intent(this, ActivityRecognitionService::class.java)
         startService(activityRecognition)
+
+        battery = Intent(this, BatteryService::class.java)
+        startService(battery)
+
+
 
 
 
@@ -67,7 +83,14 @@ class MainActivity : AppCompatActivity(){
 
 
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        stopService(serviceLocalisation)
+        stopService(serviceFall)
+        stopService(serviceShake)
+        stopService(activityRecognition)
+        stopService(battery)
+    }
 
 
 
@@ -171,10 +194,8 @@ class MainActivity : AppCompatActivity(){
             intent: Intent
         ) { // Get extra data included in the Intent
             val message = intent.getStringExtra("key")
-            if(message == "UpdateLocation"){
-
-                locationT.text = LocalisationService.location
-            }else if(message == "UpdateLogs"){
+            if (message == "UpdateLocation") locationT.text = LocalisationService.location
+            else if (message == "UpdateLogs") {
                 logs.text = TransitionBroadcastReceiver.logs
                 currentAct.text = "Current activity : ${TransitionBroadcastReceiver.currentActivity}"
             }
