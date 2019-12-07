@@ -17,6 +17,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.R.attr.name
+import android.R.attr.start
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
@@ -26,12 +27,16 @@ class BatteryService : Service() {
     private var check = false
     private var prevLevel = 100
     private lateinit var mBatInfoReceiver: BroadcastReceiver
+    private var startTime = 0L
 
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startTime = System.currentTimeMillis()
+        Log.d("LOCKSCREEN", "battery started")
+
         mBatInfoReceiver = object : BroadcastReceiver() {
             override fun onReceive(ctxt: Context, intent: Intent) {
                 val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
@@ -39,8 +44,8 @@ class BatteryService : Service() {
                     //Log.d("BATTERY_LEVEL", "battery has dropped by ${prevLevel - level}% in the last minute")
                     Toast.makeText(this@BatteryService, "The battery level has dropped by ${prevLevel - level}% in the last minute", Toast.LENGTH_LONG).show()
                     check = false
+                    prevLevel = level
                 }
-                prevLevel = level
             }
         }
         this.registerReceiver(this.mBatInfoReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
@@ -60,6 +65,7 @@ class BatteryService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("LOCKSCREEN", "battery destroyed after ${System.currentTimeMillis()- startTime}")
         unregisterReceiver(mBatInfoReceiver)
     }
 
