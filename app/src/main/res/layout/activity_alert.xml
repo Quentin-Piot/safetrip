@@ -21,7 +21,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="88dp"
         android:width="300dp"
         android:gravity="center"
         android:password="false"
@@ -38,7 +38,7 @@
         android:id="@+id/imageView2"
         android:layout_width="200dp"
         android:layout_height="42dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="60dp"
         android:tint="#5FBFBFBF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.331"
@@ -205,9 +205,11 @@
 
     <TextView
         android:id="@+id/locationT"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 

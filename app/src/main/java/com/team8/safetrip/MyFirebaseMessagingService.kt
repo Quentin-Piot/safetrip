@@ -73,7 +73,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             )
             manager.createNotificationChannel(channel)
         }
-        manager.notify(0, builder.build())
+        manager.notify(2, builder.build())
 
 
     }catch(e : Exception)

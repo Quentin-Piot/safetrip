@@ -46,7 +46,7 @@ class AlertActivity : AppCompatActivity() {
 
         setTimer()
 
-        locationT.text = "Location : " + LocalisationService.latitude
+        locationT.text = LocalisationService.location
         button0.setOnClickListener {
 
             if (password.length() < 4) {
