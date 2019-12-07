@@ -5,7 +5,13 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_alert.*
+import org.json.JSONException
+import org.json.JSONObject
 
 
 class AlertActivity : AppCompatActivity() {
@@ -13,9 +19,24 @@ class AlertActivity : AppCompatActivity() {
     private lateinit var mp : MediaPlayer
     private lateinit var data : Data
     private lateinit var pass : String
+
+    private val FCM_API = "https://fcm.googleapis.com/fcm/send"
+    private val serverKey =
+        "key=" + "AAAAJaVNcog:APA91bEhg0SJTAYDJ7YzyvnDudMOJThDZm_JAFwmiVBqB5adTS_FZf8f6O8bMyMHBa28cokYXQNQxYYi1E_J4XWsWhSuqRbV0wRxqXdoi99PE0thrGXAkFH3P2geHl5gTktZrvVcM14F"
+    private val contentType = "application/json"
+
+    private val requestQueue: RequestQueue by lazy {
+        Volley.newRequestQueue(this.applicationContext)
+    }
+
+
+    companion object {
+        var created = false
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alert)
+        created = true
         mp = MediaPlayer.create(this, R.raw.alarm)
         mp.isLooping = true
         data = Data().loadData()
@@ -137,6 +158,9 @@ class AlertActivity : AppCompatActivity() {
         if (password.text == pass) {
             mp!!.stop()
             ShakeService.alarmActivated = false
+
+            mp.stop()
+            created = false
             this.finish()
         }
     }
@@ -150,9 +174,54 @@ class AlertActivity : AppCompatActivity() {
     }
 
 
+    private fun sendNotification() {
+
+
+        val topic = "/topics/alert" //topic has to match what the receiver subscribed to
+
+        val notification = JSONObject()
+        val notifcationBody = JSONObject()
+
+        try {
+            notifcationBody.put("title", "WARNING : AGRESSION NEAR YOU")
+            notifcationBody.put("latitude", LocalisationService.latitude)   //Enter your notification message
+            notifcationBody.put("longitude", LocalisationService.longitude)
+            notification.put("to", topic)
+            notification.put("data", notifcationBody)
+        } catch (e: JSONException) {
+        }
+
+
+
+        println("send notif")
+        val jsonObjectRequest = object : JsonObjectRequest(FCM_API, notification,
+            Response.Listener<JSONObject> { response ->
+                println("onResponse: $response")
+
+            },
+            Response.ErrorListener {
+                Toast.makeText(this@AlertActivity, "Request error", Toast.LENGTH_LONG).show()
+                println("onErrorResponse: Didn't work")
+            }) {
+
+            override fun getHeaders(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["Authorization"] = serverKey
+                params["Content-Type"] = contentType
+                return params
+            }
+        }
+        requestQueue.add(jsonObjectRequest)
+    }
+
+
+
+
+
     private fun contactRelatives(){
 
 
+        sendNotification()
 
     }
 }

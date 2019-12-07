@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "161687106184",
+    "firebase_url": "https://safetrip-54499.firebaseio.com",
+    "project_id": "safetrip-54499",
+    "storage_bucket": "safetrip-54499.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161687106184:android:a2481ade38879ed465253d",
+        "android_client_info": {
+          "package_name": "com.team8.safetrip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "161687106184-12lse87slopph1t4ki57a449d3hdcpag.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkmEXFYaVvKZ7d4SoHtt3Jd3zft9hM8Vg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161687106184-12lse87slopph1t4ki57a449d3hdcpag.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

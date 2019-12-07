@@ -20,6 +20,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import android.widget.TextView
 import androidx.core.app.ComponentActivity.ExtraData
@@ -46,6 +47,9 @@ class MainActivity : AppCompatActivity(){
         setupPermissions()
         showNotification()
 
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/alert")
+
+
         LocalBroadcastManager.getInstance(this).registerReceiver(
             mMessageReceiver,  IntentFilter("intentKey"))
 
@@ -68,6 +72,8 @@ class MainActivity : AppCompatActivity(){
 
 
 
+        val messagingService = Intent(this, MyFirebaseMessagingService::class.java)
+        startService(messagingService)
 
 
         settingsButton.setOnClickListener {
@@ -164,13 +170,13 @@ class MainActivity : AppCompatActivity(){
     private fun showNotification() {
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("YOUR_CHANNEL_ID",
+            val channel = NotificationChannel("2",
                 "YOUR_CHANNEL_NAME",
                 NotificationManager.IMPORTANCE_DEFAULT)
             channel.description = "YOUR_NOTIFICATION_CHANNEL_DISCRIPTION"
             mNotificationManager.createNotificationChannel(channel)
         }
-        val mBuilder = NotificationCompat.Builder(applicationContext, "YOUR_CHANNEL_ID")
+        val mBuilder = NotificationCompat.Builder(applicationContext, "2")
             .setSmallIcon(R.drawable.ic_notification_icon) // notification icon
             .setContentTitle("Safe Trip is activated") // title for notification
             .setContentText("Safe Trip is running in background, you're safe to go home")// message for notification
@@ -184,7 +190,14 @@ class MainActivity : AppCompatActivity(){
         val intent = Intent(applicationContext, MainActivity::class.java)
         val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         mBuilder.setContentIntent(pi)
-        mNotificationManager.notify(0, mBuilder.build())
+        mNotificationManager.notify(1, mBuilder.build())
+    }
+
+    private fun launchAlarm(){
+        val intent = Intent(this, AlertActivity::class.java)
+
+
+        startActivity(intent)
     }
 
 
@@ -198,6 +211,8 @@ class MainActivity : AppCompatActivity(){
             else if (message == "UpdateLogs") {
                 logs.text = TransitionBroadcastReceiver.logs
                 currentAct.text = "Current activity : ${TransitionBroadcastReceiver.currentActivity}"
+            }else if(message == "Alarm"){
+               launchAlarm()
             }
         }
     }
