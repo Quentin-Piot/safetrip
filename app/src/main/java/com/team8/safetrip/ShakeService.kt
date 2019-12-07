@@ -11,6 +11,7 @@ import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.IBinder
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.util.Log
 
 import java.util.Random
@@ -99,16 +100,20 @@ class ShakeService : Service(), SensorEventListener {
         }
     }
 
+    private fun sendMessageToActivity(msg: String) {
+
+        val i = Intent("intentKey")
+        i.putExtra("key", msg)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(i)
+    }
 
     private fun ring(){
-        alarmActivated = true
+        if(!AlertActivity.created) {
+            alarmActivated = true
 
+            sendMessageToActivity("Alarm")
 
-        val intent = Intent(this, AlertActivity::class.java)
-
-
-        startActivity(intent)
-
+        }
 
     }
 
