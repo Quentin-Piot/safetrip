@@ -16,7 +16,6 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,20 +24,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".BackgroundService"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBtpitp_wXXe-la8SpbrhK0Axz84lLz3l8"/>
-
+            android:value="AIzaSyBtpitp_wXXe-la8SpbrhK0Axz84lLz3l8" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-
-
-        <activity android:name=".AgressionActivity"    android:screenOrientation="portrait">
-
-        </activity>
+        <activity
+            android:name=".AgressionActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".AlertActivity"
             android:screenOrientation="portrait" />

@@ -140,6 +140,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * the previous token had been compromised. Note that this is called when the InstanceID token
      * is initially generated so this is where you would retrieve the token.
      */
+
+
+
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
 

@@ -1,5 +1,7 @@
 package com.team8.safetrip
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -9,7 +11,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Handler
 import android.os.IBinder
-import android.view.Gravity
+import android.os.SystemClock
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
@@ -53,6 +55,8 @@ class ShakeService : Service(), SensorEventListener {
         if(!MainActivity.launchedAll) Toast.makeText(this,"Shake service launched", Toast.LENGTH_SHORT).show()
         return Service.START_STICKY
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -114,6 +118,9 @@ class ShakeService : Service(), SensorEventListener {
         i.putExtra("key", msg)
         LocalBroadcastManager.getInstance(this).sendBroadcast(i)
     }
+
+
+
 
     private fun ring(){
         if(!AlertActivity.created) {

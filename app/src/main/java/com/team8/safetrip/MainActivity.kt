@@ -42,17 +42,17 @@ class MainActivity : AppCompatActivity(){
 
 
         var launchedAll = false
+        var activityLaunched = false
+
 
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        activityLaunched = true
         setContentView(R.layout.activity_main)
         setupPermissions()
-        showNotification()
-
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/alert")
         Thread.setDefaultUncaughtExceptionHandler(onRuntimeError)
 
@@ -65,7 +65,8 @@ class MainActivity : AppCompatActivity(){
 
             if(ShakeService.INSTANCE == null) {
                 serviceShake = Intent(this, ShakeService::class.java)
-                startService(serviceShake)            }
+                startService(serviceShake)
+                }
         }
 
         Locbutton.setOnClickListener {
@@ -126,6 +127,9 @@ class MainActivity : AppCompatActivity(){
         startService(messagingService)
 
 
+        val backgroundService = Intent(this, BackgroundService::class.java)
+        startService(backgroundService)
+
         settingsButton.setOnClickListener {
 
             val intentSettings = Intent(this, Settings::class.java)
@@ -138,6 +142,12 @@ class MainActivity : AppCompatActivity(){
     }
 
 
+
+
+    override  fun onStop(){
+        super.onStop()
+        activityLaunched = false
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -217,31 +227,7 @@ class MainActivity : AppCompatActivity(){
     }
 
 
-    private fun showNotification() {
-        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("2",
-                "background running",
-                NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = "it's the notifications that say background"
-            mNotificationManager.createNotificationChannel(channel)
-        }
-        val mBuilder = NotificationCompat.Builder(applicationContext, "2")
-            .setSmallIcon(R.drawable.ic_notification_icon) // notification icon
-            .setContentTitle("Safe Trip is activated") // title for notification
-            .setContentText("Safe Trip is running in background, you're safe to go home")// message for notification
-            .setVisibility(VISIBILITY_PUBLIC)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText("Safe Trip is running in background, you're safe to go home"))
 
-            // clear notification after click
-            .setAutoCancel(false)
-            .setOngoing(true);
-        val intent = Intent(applicationContext, MainActivity::class.java)
-        val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        mBuilder.setContentIntent(pi)
-        mNotificationManager.notify(1, mBuilder.build())
-    }
 
     private fun launchAlarm(){
         val intent = Intent(this, AlertActivity::class.java)
