@@ -28,11 +28,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      */
 
 
-    private var latitude = 0.0
-    private  var longitude = 0.0
-    private var location = ""
-    lateinit var geocoder : Geocoder
-    private var distance = 2.0
+    lateinit var geocoder: Geocoder
+
+
+    companion object {
+
+        private const val TAG = "MyFirebaseMsgService"
+
+        var latitude = 0.0
+        var longitude = 0.0
+        var location = ""
+        var distance = 2.0
+    }
 
     // [START receive_message]
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -45,40 +52,39 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // and data payloads are treated as notification messages. The Firebase console always sends notification
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
-        try{
-        super.onMessageReceived(remoteMessage)
-        Log.d(
-            "msg",
-            "onMessageReceived: " + remoteMessage.data["message"]
-        )
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent =
-            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
-        val channelId = "Default"
-        val builder =
-            NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentTitle(remoteMessage.notification!!.title)
-                .setContentText(remoteMessage.notification!!.body)
-                .setAutoCancel(true).setContentIntent(pendingIntent)
-        val manager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Default channel",
-                NotificationManager.IMPORTANCE_DEFAULT
+        try {
+            super.onMessageReceived(remoteMessage)
+            Log.d(
+                "msg",
+                "onMessageReceived: " + remoteMessage.data["message"]
             )
-            manager.createNotificationChannel(channel)
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val pendingIntent =
+                PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+            val channelId = "Default"
+            val builder =
+                NotificationCompat.Builder(this, channelId)
+                    .setSmallIcon(R.drawable.ic_notification_icon)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentTitle(remoteMessage.notification!!.title)
+                    .setContentText(remoteMessage.notification!!.body)
+                    .setAutoCancel(true).setContentIntent(pendingIntent)
+            val manager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    channelId,
+                    "Default channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
+                manager.createNotificationChannel(channel)
+            }
+            manager.notify(2, builder.build())
+
+
+        } catch (e: Exception) {
         }
-        manager.notify(2, builder.build())
-
-
-    }catch(e : Exception)
-    {
-    }
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
@@ -101,7 +107,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 println("distance $distance")
 
 
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 println("erreur")
 
             }
@@ -122,7 +128,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        if(distance < 2) {
+        if (distance < 2) {
             sendNotification("Latitude : $latitude; longitude : $longitude\n$location")
         }
     }
@@ -180,10 +186,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param messageBody FCM message body received.
      */
     private fun sendNotification(messageBody: String) {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, AgressionActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-            PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0 /* Request code */, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
+
 
         val channelId = "1"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -194,25 +203,30 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setDefaults(Notification.DEFAULT_ALL)
             .setAutoCancel(true)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(messageBody))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(messageBody)
+            )
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(
+                channelId,
+                "Alert notifications",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }
 
-    fun getLocation(latitude : Double, longitude : Double) : String{
+    fun getLocation(latitude: Double, longitude: Double): String {
         geocoder = Geocoder(this, Locale.getDefault())
 
         try {
@@ -227,9 +241,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val address: String = addresses[0]
                 .getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-           return "Location : $address"
+            return "Location : $address"
 
-        }catch (e : Exception){
+        } catch (e: Exception) {
             //Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
             return ""
 
@@ -264,8 +278,4 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         return rad * 180.0 / Math.PI
     }
 
-    companion object {
-
-        private const val TAG = "MyFirebaseMsgService"
-    }
 }

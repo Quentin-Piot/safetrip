@@ -221,9 +221,9 @@ class MainActivity : AppCompatActivity(){
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel("2",
-                "YOUR_CHANNEL_NAME",
+                "background running",
                 NotificationManager.IMPORTANCE_DEFAULT)
-            channel.description = "YOUR_NOTIFICATION_CHANNEL_DISCRIPTION"
+            channel.description = "it's the notifications that say background"
             mNotificationManager.createNotificationChannel(channel)
         }
         val mBuilder = NotificationCompat.Builder(applicationContext, "2")

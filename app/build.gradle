@@ -47,4 +47,5 @@ dependencies {
     implementation files('libs/weka.jar')
     implementation 'com.google.firebase:firebase-messaging:20.0.1'
     implementation 'androidx.work:work-runtime:2.0.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }
