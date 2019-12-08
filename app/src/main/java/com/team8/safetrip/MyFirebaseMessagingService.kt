@@ -193,10 +193,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentText(messageBody)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setDefaults(Notification.DEFAULT_ALL)
-
+            .setAutoCancel(true)
             .setStyle(NotificationCompat.BigTextStyle()
                 .bigText(messageBody))
-            .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
 

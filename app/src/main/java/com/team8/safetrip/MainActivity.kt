@@ -38,6 +38,12 @@ class MainActivity : AppCompatActivity(){
     private lateinit var battery: Intent
 
 
+    companion object {
+
+
+        var launchedAll = false
+
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,21 +59,64 @@ class MainActivity : AppCompatActivity(){
         LocalBroadcastManager.getInstance(this).registerReceiver(
             mMessageReceiver,  IntentFilter("intentKey"))
 
-        serviceLocalisation = Intent(this, LocalisationService::class.java)
-        startService(serviceLocalisation)
 
-        serviceFall = Intent(this, FallService::class.java)
-        startService(serviceFall)
+        Shakebutton.setOnClickListener {
+
+            if(ShakeService.INSTANCE == null) {
+                serviceShake = Intent(this, ShakeService::class.java)
+                startService(serviceShake)            }
+        }
+
+        Locbutton.setOnClickListener {
+
+            if(LocalisationService.INSTANCE == null){
+                serviceLocalisation = Intent(this, LocalisationService::class.java)
+                startService(serviceLocalisation)
+            }
+        }
 
 
-        serviceShake = Intent(this, ShakeService::class.java)
-        startService(serviceShake)
+        Fallbutton.setOnClickListener {
+            if(FallService.INSTANCE == null){
+                serviceFall = Intent(this, FallService::class.java)
+                startService(serviceFall)
+            }
+        }
 
-        activityRecognition = Intent(this, ActivityRecognitionService::class.java)
-        startService(activityRecognition)
 
-        battery = Intent(this, BatteryService::class.java)
-        startService(battery)
+
+
+        ARbutton.setOnClickListener {
+            if(ActivityRecognitionService.INSTANCE == null){
+                activityRecognition = Intent(this, ActivityRecognitionService::class.java)
+                startService(activityRecognition)
+            }
+        }
+
+        Batbutton.setOnClickListener {
+
+            if(BatteryService.INSTANCE == null){
+                battery = Intent(this, BatteryService::class.java)
+                startService(battery)
+            }
+        }
+
+        Allbutton.setOnClickListener {
+            launchedAll = true
+            serviceShake = Intent(this, ShakeService::class.java)
+            startService(serviceShake)
+            serviceLocalisation = Intent(this, LocalisationService::class.java)
+            startService(serviceLocalisation)
+            serviceFall = Intent(this, FallService::class.java)
+            startService(serviceFall)
+            activityRecognition = Intent(this, ActivityRecognitionService::class.java)
+            startService(activityRecognition)
+            battery = Intent(this, BatteryService::class.java)
+            startService(battery)
+            Toast.makeText(this, "All services launched", Toast.LENGTH_LONG).show()
+
+        }
+
 
 
 
@@ -159,7 +208,7 @@ class MainActivity : AppCompatActivity(){
                     setupPermissions()
                 } else {
 
-                    Toast.makeText(applicationContext, "All permissions granted", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(applicationContext, "All permissions granted", Toast.LENGTH_SHORT).show()
 
                 }
             }

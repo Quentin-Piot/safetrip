@@ -27,6 +27,7 @@ class LocalisationService  : Service() {
         var latitude : Double = 36.3684239
         var longitude : Double = 127.3569268
         var location : String = ""
+        var INSTANCE: LocalisationService? = null
 
     }
 
@@ -35,8 +36,11 @@ class LocalisationService  : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        INSTANCE = this
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         geocoder = Geocoder(this, Locale.getDefault())
+        if(!MainActivity.launchedAll) Toast.makeText(this,"Localisation service launched", Toast.LENGTH_SHORT).show()
+
 
         val t = Timer()
 
@@ -60,6 +64,12 @@ class LocalisationService  : Service() {
 
 
         return Service.START_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        INSTANCE = null
+
     }
 
 

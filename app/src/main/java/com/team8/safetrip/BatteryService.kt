@@ -29,11 +29,18 @@ class BatteryService : Service() {
     private lateinit var mBatInfoReceiver: BroadcastReceiver
     private var startTime = 0L
 
+    companion object {
+
+        var INSTANCE: BatteryService? = null
+
+    }
+
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        INSTANCE = this
         startTime = System.currentTimeMillis()
         Log.d("LOCKSCREEN", "battery started")
 
@@ -42,7 +49,7 @@ class BatteryService : Service() {
                 val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
                 if (check) {
                     //Log.d("BATTERY_LEVEL", "battery has dropped by ${prevLevel - level}% in the last minute")
-                    Toast.makeText(this@BatteryService, "The battery level has dropped by ${prevLevel - level}% in the last minute", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this@BatteryService, "The battery level has dropped by ${prevLevel - level}% in the last minute", Toast.LENGTH_LONG).show()
                     check = false
                     prevLevel = level
                 }
@@ -57,14 +64,17 @@ class BatteryService : Service() {
                     check = true
                 }
             },  //Set how long before to start calling the TimerTask (in milliseconds)
-            0,  //Set the amount of time between each execution (in milliseconds)
+            5000,  //Set the amount of time between each execution (in milliseconds)
             60000
         )
-        return super.onStartCommand(intent, flags, startId)
+        if(!MainActivity.launchedAll) Toast.makeText(this,"Battery Service launched", Toast.LENGTH_SHORT).show()
+
+        return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        INSTANCE = null
         Log.d("LOCKSCREEN", "battery destroyed after ${System.currentTimeMillis()- startTime}")
         unregisterReceiver(mBatInfoReceiver)
     }

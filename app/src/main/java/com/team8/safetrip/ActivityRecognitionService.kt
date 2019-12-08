@@ -15,6 +15,12 @@ import java.util.*
 
 class ActivityRecognitionService : Service() {
     lateinit var context: Context
+    companion object {
+
+
+        var INSTANCE: ActivityRecognitionService? = null
+
+    }
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -22,7 +28,7 @@ class ActivityRecognitionService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
-
+        INSTANCE = this
         context = this
 
 
@@ -36,10 +42,16 @@ class ActivityRecognitionService : Service() {
         startGetBroadcast(pendingIntentBroadcast, request, "pendingIntentBroadcast")
 
         refresh()
+        if(!MainActivity.launchedAll) Toast.makeText(this,"Activity Recognition service launched", Toast.LENGTH_SHORT).show()
 
         return START_STICKY
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        INSTANCE = null
+
+    }
 
     private fun refresh() {
 
@@ -54,8 +66,8 @@ class ActivityRecognitionService : Service() {
             ActivityRecognition.getClient(this)
                 .requestActivityTransitionUpdates(request, pendingIntent)
         task.addOnSuccessListener {
-            Toast.makeText(context, "Waiting for Activity Transitions...", Toast.LENGTH_LONG)
-                .show()
+//            Toast.makeText(context, "Waiting for Activity Transitions...", Toast.LENGTH_LONG)
+//                .show()
         }
         task.addOnCompleteListener {
             //Toast.makeText(context, "oncomplete " + type, Toast.LENGTH_SHORT).show();

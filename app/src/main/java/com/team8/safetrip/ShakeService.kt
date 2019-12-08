@@ -1,20 +1,17 @@
 package com.team8.safetrip
 
-import android.app.*
+import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.media.MediaPlayer
 import android.os.Handler
 import android.os.IBinder
+import android.view.Gravity
+import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import android.util.Log
-
-import java.util.Random
 
 
 class ShakeService : Service(), SensorEventListener {
@@ -32,25 +29,34 @@ class ShakeService : Service(), SensorEventListener {
 
 
 
+
     companion object {
         var alarmActivated = false
+
+        var INSTANCE: ShakeService? = null
+
+
+
     }
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        INSTANCE = this
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mAccelerometer = mSensorManager!!
             .getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         mSensorManager!!.registerListener(this, mAccelerometer,
             SensorManager.SENSOR_DELAY_UI, Handler())
 
+        if(!MainActivity.launchedAll) Toast.makeText(this,"Shake service launched", Toast.LENGTH_SHORT).show()
         return Service.START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        INSTANCE = null
         mSensorManager?.unregisterListener(this)
     }
 
@@ -99,6 +105,7 @@ class ShakeService : Service(), SensorEventListener {
 
         }
     }
+
 
     private fun sendMessageToActivity(msg: String) {
 

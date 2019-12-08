@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
 import android.util.Log
+import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.team8.safetrip.ShakeService.Companion.alarmActivated
 import weka.core.Attribute
@@ -41,12 +42,21 @@ class FallService : Service(), SensorEventListener {
     private var gyroscopeZ: MutableList<Float> = ArrayList()
 
 
+    companion object {
+
+        var INSTANCE: FallService? = null
+
+    }
+
+
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
-    override fun onCreate() {
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onCreate()
+
+        INSTANCE = this
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mGyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
         mAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -59,11 +69,15 @@ class FallService : Service(), SensorEventListener {
         }
 
         loadInstances()
+        if(!MainActivity.launchedAll) Toast.makeText(this,"Fall service launched", Toast.LENGTH_SHORT).show()
+        return START_STICKY
+
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        INSTANCE = null
         sensorManager.unregisterListener(this)
     }
 
