@@ -2,6 +2,7 @@ package com.team8.safetrip
 
 import weka.classifiers.bayes.NaiveBayes
 import weka.classifiers.bayes.BayesNet
+import weka.classifiers.functions.SMO
 import weka.classifiers.trees.J48
 
 import java.io.BufferedReader
@@ -16,7 +17,7 @@ import weka.core.converters.ArffSaver
 class ClassifierWrapper {
     private val TAG = "ClassifierWrapper"
     private var instancesForTraining: Instances? = null
-    private var classifier = NaiveBayes()
+    private var classifier = SMO()
     /* You can try other algorithms, i.e. */
     /* private var classifier = BayesNet() */
     /* private var classifier = J48() */
