@@ -142,7 +142,7 @@ class FallService : Service(), SensorEventListener {
             instance.setDataset(instances)
             val predictedClass = classifier.predict(instance)
             //Log.d("FALLSERVICE", "predicted class: $predictedClass")
-            if ((predictedClass == "fall" && !alarmActivated) || (predictedClass == "run" && !alarmActivated))
+            if ((predictedClass == "fall" || predictedClass == "run") && !alarmActivated)
                 ring()
             clearData()
         }
@@ -229,6 +229,7 @@ class FallService : Service(), SensorEventListener {
     private fun loadInstances() {
         val assetManager = resources.assets
         instances = Instances(BufferedReader(assetManager.open("myModel.arff").bufferedReader()))
+        //instances = Instances(BufferedReader(assetManager.open("myModel_norun.arff").bufferedReader()))
         val attrClass = instances.attribute("label")
         instances.setClass(attrClass)
         classifier.train(instances)
