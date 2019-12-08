@@ -3,6 +3,7 @@ package com.team8.safetrip
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
@@ -25,6 +26,9 @@ class AlertActivity : AppCompatActivity() {
         "key=" + "AAAAJaVNcog:APA91bEhg0SJTAYDJ7YzyvnDudMOJThDZm_JAFwmiVBqB5adTS_FZf8f6O8bMyMHBa28cokYXQNQxYYi1E_J4XWsWhSuqRbV0wRxqXdoi99PE0thrGXAkFH3P2geHl5gTktZrvVcM14F"
     private val contentType = "application/json"
 
+    private var dataObj = Data()
+    private var listNumber: ArrayList<String> = arrayListOf()
+
     private val requestQueue: RequestQueue by lazy {
         Volley.newRequestQueue(this.applicationContext)
     }
@@ -41,6 +45,16 @@ class AlertActivity : AppCompatActivity() {
         mp.isLooping = true
         data = Data().loadData()
         pass = data.password
+
+        for (i in 0 until dataObj.contactList.size) {
+            if (dataObj.contactList[i] != "") {
+                var number = dataObj.contactList[i]
+                listNumber.add(number)
+
+
+            }
+
+        }
         if(!mp.isPlaying) mp!!.start()
 
 
@@ -218,9 +232,10 @@ class AlertActivity : AppCompatActivity() {
 
 
 
-    private fun contactRelatives(){
+    private fun contactRelatives() {
 
-
+        val toast = Toast.makeText(this, "${listNumber.size} relatives contacted", Toast.LENGTH_LONG)
+        toast.show()
         sendNotification()
 
     }
