@@ -111,8 +111,16 @@ class FallService : Service(), SensorEventListener {
     private fun ring()
     {
         alarmActivated = true
-        val intent = Intent(this, AlertActivity::class.java)
-        startActivity(intent)
+        sendMessageToActivity("Alarm")
+
+    }
+
+    private fun sendMessageToActivity(msg: String) {
+
+
+        val i = Intent("intentKey")
+        i.putExtra("key", msg)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(i)
     }
 
 

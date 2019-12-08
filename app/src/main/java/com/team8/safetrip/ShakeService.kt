@@ -109,6 +109,7 @@ class ShakeService : Service(), SensorEventListener {
 
     private fun sendMessageToActivity(msg: String) {
 
+
         val i = Intent("intentKey")
         i.putExtra("key", msg)
         LocalBroadcastManager.getInstance(this).sendBroadcast(i)
@@ -123,6 +124,10 @@ class ShakeService : Service(), SensorEventListener {
         }
 
     }
+
+
+
+
 
 
 

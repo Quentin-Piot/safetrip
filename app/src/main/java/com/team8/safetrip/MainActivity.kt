@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity(){
         showNotification()
 
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/alert")
+        Thread.setDefaultUncaughtExceptionHandler(onRuntimeError)
 
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -264,6 +265,10 @@ class MainActivity : AppCompatActivity(){
                launchAlarm()
             }
         }
+    }
+    private val onRuntimeError = Thread.UncaughtExceptionHandler { thread, ex ->
+        val intentSettings = Intent(this, MainActivity::class.java)
+        startActivityForResult(intentSettings, 0)
     }
 
 
