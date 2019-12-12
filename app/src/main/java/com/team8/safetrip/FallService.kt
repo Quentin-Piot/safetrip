@@ -229,7 +229,6 @@ class FallService : Service(), SensorEventListener {
     private fun loadInstances() {
         val assetManager = resources.assets
         instances = Instances(BufferedReader(assetManager.open("myModel.arff").bufferedReader()))
-        //instances = Instances(BufferedReader(assetManager.open("myModel_norun.arff").bufferedReader()))
         val attrClass = instances.attribute("label")
         instances.setClass(attrClass)
         classifier.train(instances)
