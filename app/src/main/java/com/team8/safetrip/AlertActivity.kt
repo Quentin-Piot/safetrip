@@ -29,6 +29,8 @@ class AlertActivity : AppCompatActivity() {
     private var dataObj = Data()
     private var listNumber: ArrayList<String> = arrayListOf()
 
+    private  var timerStopped : Boolean = false
+
     private val requestQueue: RequestQueue by lazy {
         Volley.newRequestQueue(this.applicationContext)
     }
@@ -45,6 +47,7 @@ class AlertActivity : AppCompatActivity() {
         mp.isLooping = true
         data = Data().loadData()
         pass = data.password
+        timerStopped = false
 
         for (i in 0 until dataObj.contactList.size) {
             if (dataObj.contactList[i] != "") {
@@ -155,14 +158,16 @@ class AlertActivity : AppCompatActivity() {
 
 
     private fun setTimer(){
-        object : CountDownTimer(10000, 1000) {
+         object : CountDownTimer(10000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 timer.text = (millisUntilFinished / 1000).toString()
             }
 
             override fun onFinish() {
-                timer.text = "Contacts warned"
-                contactRelatives()
+                if(!timerStopped) {
+                    timer.text = "Contacts warned"
+                    contactRelatives()
+                }
             }
         }.start()
 
@@ -172,9 +177,10 @@ class AlertActivity : AppCompatActivity() {
         if (password.text == pass) {
             mp!!.stop()
             ShakeService.alarmActivated = false
-
-            mp.stop()
             created = false
+            timerStopped = true
+            Toast.makeText(this, "Alert stopped", Toast.LENGTH_LONG).show()
+
             this.finish()
         }
     }
@@ -207,7 +213,6 @@ class AlertActivity : AppCompatActivity() {
 
 
 
-        println("send notif")
         val jsonObjectRequest = object : JsonObjectRequest(FCM_API, notification,
             Response.Listener<JSONObject> { response ->
                 println("onResponse: $response")
