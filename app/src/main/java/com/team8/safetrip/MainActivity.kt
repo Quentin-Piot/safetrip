@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(){
 
     private lateinit var serviceLocalisation: Intent
     private lateinit var serviceFall: Intent
-    private lateinit var serviceShake: Intent
     private lateinit var activityRecognition: Intent
 
 
@@ -44,7 +43,6 @@ class MainActivity : AppCompatActivity(){
 
         var serviceLocalisationLaunched = false
         var serviceFallLaunched = false
-        var serviceShakeLaunched = false
         var activityRecognitionLaunched = false
 
 
@@ -87,22 +85,6 @@ class MainActivity : AppCompatActivity(){
             mMessageReceiver,  IntentFilter("intentKey"))
 
 
-        Shakebutton.setOnClickListener {
-
-            if(ShakeService.INSTANCE == null) {
-                serviceShake = Intent(this, ShakeService::class.java)
-                startService(serviceShake)
-                serviceStarted()
-                serviceShakeLaunched = true
-                Shakebutton.text = "Stop shake detection"
-
-            }else{
-                Shakebutton.text = "Launch shake detection"
-                stopService(serviceShake)
-                serviceShakeLaunched = false
-                serviceStarted()
-            }
-        }
 
         Locbutton.setOnClickListener {
 
@@ -169,8 +151,6 @@ class MainActivity : AppCompatActivity(){
 
         Allbutton.setOnClickListener {
             launchedAll = true
-            serviceShake = Intent(this, ShakeService::class.java)
-            startService(serviceShake)
             serviceLocalisation = Intent(this, LocalisationService::class.java)
             startService(serviceLocalisation)
             serviceFall = Intent(this, FallService::class.java)
@@ -179,7 +159,6 @@ class MainActivity : AppCompatActivity(){
             startService(activityRecognition)
             Toast.makeText(this, "All services launched", Toast.LENGTH_LONG).show()
 
-            Shakebutton.text = "Stop shake detection"
 
             Locbutton.text = "Stop Localisation"
             Fallbutton.text = "Stop Fall Detection"
@@ -187,7 +166,6 @@ class MainActivity : AppCompatActivity(){
             activityRecognitionLaunched = true
             serviceFallLaunched = true
             serviceLocalisationLaunched = true
-            serviceShakeLaunched = true
             serviceStarted()
         }
 
@@ -227,7 +205,6 @@ class MainActivity : AppCompatActivity(){
         super.onDestroy()
         stopService(serviceLocalisation)
         stopService(serviceFall)
-        stopService(serviceShake)
         stopService(activityRecognition)
     }
 
@@ -348,7 +325,7 @@ class MainActivity : AppCompatActivity(){
 
 
 
-        }else if(!serviceFallLaunched && !serviceShakeLaunched && !activityRecognitionLaunched){
+        }else if(!serviceFallLaunched && !activityRecognitionLaunched){
                 detectionServiceLaunched = false
                 Toast.makeText(this,"No detection service is running anymore",Toast.LENGTH_SHORT).show()
                 val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

@@ -201,7 +201,6 @@ class AlertActivity : AppCompatActivity() {
 
         if (password.text == pass) {
             mp!!.stop()
-            ShakeService.alarmActivated = false
             created = false
             timerStopped = true
             Toast.makeText(this, "Alert stopped", Toast.LENGTH_LONG).show()

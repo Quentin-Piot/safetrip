@@ -105,15 +105,6 @@
         android:layout_height="40sp"
         android:layout_marginTop="5dp"
         android:text="Launch Fall Detection"
-        app:layout_constraintStart_toStartOf="@+id/Shakebutton"
-        app:layout_constraintTop_toBottomOf="@+id/Shakebutton" />
-
-    <Button
-        android:id="@+id/Shakebutton"
-        android:layout_width="250sp"
-        android:layout_height="40sp"
-        android:layout_marginTop="5dp"
-        android:text="Launch Shake Detection"
         app:layout_constraintStart_toStartOf="@+id/ARbutton"
         app:layout_constraintTop_toBottomOf="@+id/ARbutton" />
 
