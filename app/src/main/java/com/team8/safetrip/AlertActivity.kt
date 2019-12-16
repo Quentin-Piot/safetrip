@@ -2,13 +2,12 @@ package com.team8.safetrip
 
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.provider.Settings
+import android.telephony.SmsManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
@@ -260,12 +259,40 @@ class AlertActivity : AppCompatActivity() {
     }
 
 
-
+    private fun sendSMS(phoneNo: String?, msg: String?) {
+        try {
+            val smsManager: SmsManager = SmsManager.getDefault()
+            smsManager.sendTextMessage(phoneNo, null, msg, null, null)
+            Toast.makeText(
+                applicationContext, "Message Sent",
+                Toast.LENGTH_LONG
+            ).show()
+        } catch (ex: Exception) {
+            Toast.makeText(
+                applicationContext, ex.message.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+            ex.printStackTrace()
+        }
+    }
 
 
     private fun contactRelatives() {
 
         val toast = Toast.makeText(this, "${listNumber.size} relatives contacted", Toast.LENGTH_LONG)
+
+
+        //Couldn't try that because of our european mobile phone plans
+        /*
+        for(i in 0 until listNumber.size-1){
+            if(listNumber[i] != "") {
+                sendSMS(listNumber[i], "I have been agressed here : latitude : ${LocalisationService.latitude}, longitude : ${LocalisationService.longitude}, can you help me ?")
+            }
+
+        }
+
+        */
+         
         toast.show()
         sendNotification()
 
