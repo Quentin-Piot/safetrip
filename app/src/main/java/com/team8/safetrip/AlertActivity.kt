@@ -292,7 +292,7 @@ class AlertActivity : AppCompatActivity() {
         }
 
         */
-         
+
         toast.show()
         sendNotification()
 

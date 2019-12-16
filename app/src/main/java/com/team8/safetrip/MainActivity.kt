@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity(){
                 serviceLocalisation = Intent(this, LocalisationService::class.java)
                 startService(serviceLocalisation)
                 serviceLocalisationLaunched = true
+
                 Locbutton.text = "Stop Localisation"
             }else{
                 stopService(serviceLocalisation)
@@ -129,13 +130,16 @@ class MainActivity : AppCompatActivity(){
                 serviceFall = Intent(this, FallService::class.java)
                 serviceStarted()
                 serviceFallLaunched = true
+                startService(serviceFall)
                 Fallbutton.text = "Stop Fall Detection"
 
 
             }else{
-                stopService(serviceFall)
                 serviceFallLaunched = false
                 Fallbutton.text = "Launch Fall Detection"
+                stopService(serviceFall)
+
+
                 serviceStarted()
 
             }
@@ -150,6 +154,7 @@ class MainActivity : AppCompatActivity(){
                 startService(activityRecognition)
                 serviceStarted()
                 activityRecognitionLaunched = true
+
                 ARbutton.text = "Stop Activity Recognition"
 
 
@@ -168,7 +173,9 @@ class MainActivity : AppCompatActivity(){
                 battery = Intent(this, BatteryService::class.java)
                 startService(battery)
                 batterServiceLaunched = true
+
                 Batbutton.text = "Stop Battery Service"
+
 
             }else{
                 Batbutton.text = "Launch Battery Service"
@@ -193,6 +200,18 @@ class MainActivity : AppCompatActivity(){
             battery = Intent(this, BatteryService::class.java)
             startService(battery)
             Toast.makeText(this, "All services launched", Toast.LENGTH_LONG).show()
+
+            Batbutton.text = "Stop Battery Service"
+            Shakebutton.text = "Stop shake detection"
+
+            Locbutton.text = "Stop Localisation"
+            Fallbutton.text = "Stop Fall Detection"
+            ARbutton.text = "Stop Activity Recognition"
+            batterServiceLaunched = true
+            activityRecognitionLaunched = true
+            serviceFallLaunched = true
+            serviceLocalisationLaunched = true
+            serviceShakeLaunched = true
             serviceStarted()
         }
 
