@@ -56,31 +56,33 @@ class TransitionBroadcastReceiver : BroadcastReceiver() {
 
         if(currentActivity == "RUNNING" || currentActivity == "IN_VEHICLE"){
                    activeAlert()
-        }else if(currentActivity == "STILL" && lastActivity != "STILL" && !timerLaunched ){
-            timerLaunched = true
-            Toast.makeText(context, "Timer launched", Toast.LENGTH_SHORT).show()
-
-            timer = object: CountDownTimer(10000, 0) {
-
-                override fun onTick(millisUntilFinished: Long) {
-                    println("tick")
-                }
-
-                override fun onFinish() {
-                    println("cancel")
-                    timerLaunched = false
-                    activeAlert()
-                }
-            }.start()
-
-        }else if(lastActivity == "STILL" && currentActivity != "STILL"){
-            try {
-                timer.cancel()
-                timerLaunched = false
-            }catch (e : Exception){
-
-            }
         }
+
+//        else if(currentActivity == "STILL" && lastActivity != "STILL" && !timerLaunched ){
+//            timerLaunched = true
+//            Toast.makeText(context, "Timer launched", Toast.LENGTH_SHORT).show()
+//
+//            timer = object: CountDownTimer(10000, 0) {
+//
+//                override fun onTick(millisUntilFinished: Long) {
+//                    println("tick")
+//                }
+//
+//                override fun onFinish() {
+//                    println("cancel")
+//                    timerLaunched = false
+//                    activeAlert()
+//                }
+//            }.start()
+//
+//        }else if(lastActivity == "STILL" && currentActivity != "STILL"){
+//            try {
+//                timer.cancel()
+//                timerLaunched = false
+//            }catch (e : Exception){
+//
+//            }
+//        }
 
 
     }

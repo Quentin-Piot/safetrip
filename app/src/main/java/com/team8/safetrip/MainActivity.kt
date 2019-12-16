@@ -43,6 +43,15 @@ class MainActivity : AppCompatActivity(){
 
         var launchedAll = false
         var activityLaunched = false
+        var detectionServiceLaunched = false
+
+        var serviceLocalisationLaunched = false
+        var serviceFallLaunched = false
+        var serviceShakeLaunched = false
+        var activityRecognitionLaunched = false
+        var batterServiceLaunched = false
+
+
 
 
     }
@@ -66,7 +75,16 @@ class MainActivity : AppCompatActivity(){
             if(ShakeService.INSTANCE == null) {
                 serviceShake = Intent(this, ShakeService::class.java)
                 startService(serviceShake)
-                }
+                serviceStarted()
+                serviceShakeLaunched = true
+                Shakebutton.text = "Stop shake detection"
+
+            }else{
+                Shakebutton.text = "Launch shake detection"
+                stopService(serviceShake)
+                serviceShakeLaunched = false
+                serviceStarted()
+            }
         }
 
         Locbutton.setOnClickListener {
@@ -74,6 +92,15 @@ class MainActivity : AppCompatActivity(){
             if(LocalisationService.INSTANCE == null){
                 serviceLocalisation = Intent(this, LocalisationService::class.java)
                 startService(serviceLocalisation)
+                serviceLocalisationLaunched = true
+                Locbutton.text = "Stop Localisation"
+            }else{
+                stopService(serviceLocalisation)
+                serviceLocalisationLaunched = false
+                Locbutton.text = "Launch Localisation"
+
+
+
             }
         }
 
@@ -81,7 +108,17 @@ class MainActivity : AppCompatActivity(){
         Fallbutton.setOnClickListener {
             if(FallService.INSTANCE == null){
                 serviceFall = Intent(this, FallService::class.java)
-                startService(serviceFall)
+                serviceStarted()
+                serviceFallLaunched = true
+                Fallbutton.text = "Stop Fall Detection"
+
+
+            }else{
+                stopService(serviceFall)
+                serviceFallLaunched = false
+                Fallbutton.text = "Launch Fall Detection"
+                serviceStarted()
+
             }
         }
 
@@ -92,6 +129,17 @@ class MainActivity : AppCompatActivity(){
             if(ActivityRecognitionService.INSTANCE == null){
                 activityRecognition = Intent(this, ActivityRecognitionService::class.java)
                 startService(activityRecognition)
+                serviceStarted()
+                activityRecognitionLaunched = true
+                ARbutton.text = "Stop Activity Recognition"
+
+
+            }else{
+                stopService(activityRecognition)
+                activityRecognitionLaunched = false
+                ARbutton.text = "Launch Activity Recognition"
+                serviceStarted()
+
             }
         }
 
@@ -100,6 +148,16 @@ class MainActivity : AppCompatActivity(){
             if(BatteryService.INSTANCE == null){
                 battery = Intent(this, BatteryService::class.java)
                 startService(battery)
+                batterServiceLaunched = true
+                Batbutton.text = "Stop Battery Service"
+
+            }else{
+                Batbutton.text = "Launch Battery Service"
+
+                stopService(battery)
+
+                batterServiceLaunched = false
+
             }
         }
 
@@ -116,7 +174,7 @@ class MainActivity : AppCompatActivity(){
             battery = Intent(this, BatteryService::class.java)
             startService(battery)
             Toast.makeText(this, "All services launched", Toast.LENGTH_LONG).show()
-
+            serviceStarted()
         }
 
 
@@ -127,8 +185,7 @@ class MainActivity : AppCompatActivity(){
         startService(messagingService)
 
 
-        val backgroundService = Intent(this, BackgroundService::class.java)
-        startService(backgroundService)
+
 
         settingsButton.setOnClickListener {
 
@@ -230,10 +287,12 @@ class MainActivity : AppCompatActivity(){
 
 
     private fun launchAlarm(){
-        val intent = Intent(this, AlertActivity::class.java)
+        if(!AlertActivity.created) {
+            val intent = Intent(this, AlertActivity::class.java)
 
 
-        startActivity(intent)
+            startActivity(intent)
+        }
     }
 
 
@@ -242,19 +301,73 @@ class MainActivity : AppCompatActivity(){
             context: Context,
             intent: Intent
         ) { // Get extra data included in the Intent
-            val message = intent.getStringExtra("key")
-            if (message == "UpdateLocation") locationT.text = LocalisationService.location
-            else if (message == "UpdateLogs") {
-                logs.text = TransitionBroadcastReceiver.logs
-                currentAct.text = "Current activity : ${TransitionBroadcastReceiver.currentActivity}"
-            }else if(message == "Alarm"){
-               launchAlarm()
+            when (intent.getStringExtra("key")) {
+                "UpdateLocation" -> locationT.text = LocalisationService.location
+                "UpdateLogs" -> {
+                    logs.text = TransitionBroadcastReceiver.logs
+                    currentAct.text = "Current activity : ${TransitionBroadcastReceiver.currentActivity}"
+                }
+                "Alarm" -> {
+                    launchAlarm()
+                }
             }
         }
     }
-    private val onRuntimeError = Thread.UncaughtExceptionHandler { thread, ex ->
+    private val onRuntimeError = Thread.UncaughtExceptionHandler { _, _ ->
         val intentSettings = Intent(this, MainActivity::class.java)
         startActivityForResult(intentSettings, 0)
+    }
+
+
+    private fun serviceStarted(){
+
+        if(!detectionServiceLaunched){
+            detectionServiceLaunched = true
+
+            showNotification()
+
+
+            val backgroundService = Intent(this, BackgroundService::class.java)
+            startService(backgroundService)
+
+
+
+        }else if(!serviceFallLaunched && !serviceShakeLaunched && !activityRecognitionLaunched){
+                detectionServiceLaunched = false
+                Toast.makeText(this,"No detection service is running anymore",Toast.LENGTH_SHORT).show()
+                val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                mNotificationManager.cancel(1)
+
+        }
+
+    }
+
+
+    private fun showNotification() {
+        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("2",
+                "background running",
+                NotificationManager.IMPORTANCE_DEFAULT)
+            channel.description = "it's the notifications that say background"
+            mNotificationManager.createNotificationChannel(channel)
+        }
+        val mBuilder = NotificationCompat.Builder(applicationContext, "2")
+            .setSmallIcon(R.drawable.ic_notification_icon) // notification icon
+            .setContentTitle("Safe Trip is activated") // title for notification
+            .setContentText("Safe Trip is running in background, you're safe to go home")// message for notification
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("Safe Trip is running in background, you're safe to go home"))
+
+            // clear notification after click
+            .setAutoCancel(false)
+            .setOngoing(true);
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        mBuilder.setContentIntent(pi)
+        mNotificationManager.notify(1, mBuilder.build())
     }
 
 

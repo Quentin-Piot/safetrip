@@ -41,7 +41,6 @@ class ActivityRecognitionService : Service() {
 
         startGetBroadcast(pendingIntentBroadcast, request, "pendingIntentBroadcast")
 
-        refresh()
         if(!MainActivity.launchedAll) Toast.makeText(this,"Activity Recognition service launched", Toast.LENGTH_SHORT).show()
 
         return START_STICKY
@@ -53,9 +52,7 @@ class ActivityRecognitionService : Service() {
 
     }
 
-    private fun refresh() {
 
-    }
 
     private fun startGetBroadcast(
         pendingIntent: PendingIntent,
@@ -77,13 +74,8 @@ class ActivityRecognitionService : Service() {
         }
     }
 
-    var detectedActivity = intArrayOf(
-        DetectedActivity.IN_VEHICLE,
-        DetectedActivity.ON_BICYCLE,
-        DetectedActivity.RUNNING,
-        DetectedActivity.STILL,
-        DetectedActivity.WALKING
-    )
+
+    //We use it only for vehicle recognition now
 
     private fun getTransitionActivityList(): List<ActivityTransition> {
         val transitions: MutableList<ActivityTransition> =
@@ -124,31 +116,31 @@ class ActivityRecognitionService : Service() {
                 .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
                 .build()
         )
-        transitions.add(
-            ActivityTransition.Builder()
-                .setActivityType(DetectedActivity.ON_BICYCLE)
-                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
-                .build()
-        )
-        transitions.add(
-            ActivityTransition.Builder()
-                .setActivityType(DetectedActivity.ON_BICYCLE)
-                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
-                .build()
-        )
+//        transitions.add(
+//            ActivityTransition.Builder()
+//                .setActivityType(DetectedActivity.ON_BICYCLE)
+//                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+//                .build()
+//        )
+//        transitions.add(
+//            ActivityTransition.Builder()
+//                .setActivityType(DetectedActivity.ON_BICYCLE)
+//                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+//                .build()
+//        )
 
-        transitions.add(
-            ActivityTransition.Builder()
-                .setActivityType(DetectedActivity.RUNNING)
-                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
-                .build()
-        )
-        transitions.add(
-            ActivityTransition.Builder()
-                .setActivityType(DetectedActivity.RUNNING)
-                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
-                .build()
-        )
+//        transitions.add(
+//            ActivityTransition.Builder()
+//                .setActivityType(DetectedActivity.RUNNING)
+//                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+//                .build()
+//        )
+//        transitions.add(
+//            ActivityTransition.Builder()
+//                .setActivityType(DetectedActivity.RUNNING)
+//                .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+//                .build()
+//        )
         return transitions
     }
 
