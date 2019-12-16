@@ -24,10 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".BackgroundService"
-            android:enabled="true"
-            android:exported="true"></service>
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -54,12 +51,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".BackgroundService" />
 
         <service android:name=".ShakeService" />
         <service android:name=".LocalisationService" />
         <service android:name=".ActivityRecognitionService" />
         <service android:name=".FallService" />
         <service android:name=".BatteryService" />
+
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

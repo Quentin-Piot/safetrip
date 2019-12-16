@@ -326,9 +326,9 @@ class MainActivity : AppCompatActivity(){
 
             showNotification()
 
-
-            val backgroundService = Intent(this, BackgroundService::class.java)
-            startService(backgroundService)
+//
+//            val backgroundService = Intent(this, BackgroundService::class.java)
+//            startService(backgroundService)
 
 
 
