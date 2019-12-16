@@ -59,7 +59,6 @@
         <service android:name=".LocalisationService" />
         <service android:name=".ActivityRecognitionService" />
         <service android:name=".FallService" />
-        <service android:name=".BatteryService" />
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>

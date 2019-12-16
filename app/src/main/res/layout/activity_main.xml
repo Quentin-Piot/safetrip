@@ -100,15 +100,6 @@
         app:layout_constraintTop_toBottomOf="@+id/Fallbutton" />
 
     <Button
-        android:id="@+id/Batbutton"
-        android:layout_width="250sp"
-        android:layout_height="40sp"
-        android:layout_marginTop="5dp"
-        android:text="Launch Battery Service"
-        app:layout_constraintStart_toStartOf="@+id/Locbutton"
-        app:layout_constraintTop_toBottomOf="@+id/Locbutton" />
-
-    <Button
         android:id="@+id/Fallbutton"
         android:layout_width="250sp"
         android:layout_height="40sp"
@@ -132,10 +123,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Launch All"
-        app:layout_constraintEnd_toEndOf="@+id/Batbutton"
+        app:layout_constraintEnd_toEndOf="@+id/Locbutton"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="@+id/Batbutton"
-        app:layout_constraintTop_toBottomOf="@+id/Batbutton" />
+        app:layout_constraintStart_toStartOf="@+id/Locbutton"
+        app:layout_constraintTop_toBottomOf="@+id/Locbutton" />
 
     <TextView
         android:id="@+id/textView8"
@@ -143,7 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="72dp"
-        android:text="Developper Mode : "
+        android:text="Developer Mode : "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationT" />
 
@@ -153,7 +144,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:checked="false"
-        android:text="Desactive Sound"
+        android:text="Deactivate Sound"
         app:layout_constraintBottom_toBottomOf="@+id/textView8"
         app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toTopOf="@+id/textView8" />

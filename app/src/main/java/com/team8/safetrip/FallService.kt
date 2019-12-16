@@ -11,7 +11,6 @@ import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.team8.safetrip.ShakeService.Companion.alarmActivated
 import weka.core.Attribute
 import weka.core.FastVector
 import weka.core.Instance
@@ -142,7 +141,7 @@ class FallService : Service(), SensorEventListener {
             instance.setDataset(instances)
             val predictedClass = classifier.predict(instance)
             //Log.d("FALLSERVICE", "predicted class: $predictedClass")
-            if ((predictedClass == "fall" || predictedClass == "run") && !alarmActivated)
+            if ((predictedClass == "fall" || predictedClass == "run") && !AlertActivity.created)
                 ring()
             clearData()
         }
@@ -150,7 +149,6 @@ class FallService : Service(), SensorEventListener {
 
     private fun ring()
     {
-        alarmActivated = true
         sendMessageToActivity("Alarm")
 
     }

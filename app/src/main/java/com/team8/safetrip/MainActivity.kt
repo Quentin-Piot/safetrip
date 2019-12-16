@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity(){
     private lateinit var serviceFall: Intent
     private lateinit var serviceShake: Intent
     private lateinit var activityRecognition: Intent
-    private lateinit var battery: Intent
 
 
     companion object {
@@ -47,7 +46,6 @@ class MainActivity : AppCompatActivity(){
         var serviceFallLaunched = false
         var serviceShakeLaunched = false
         var activityRecognitionLaunched = false
-        var batterServiceLaunched = false
 
 
         var debugNoVolume = false
@@ -167,25 +165,7 @@ class MainActivity : AppCompatActivity(){
             }
         }
 
-        Batbutton.setOnClickListener {
 
-            if(BatteryService.INSTANCE == null){
-                battery = Intent(this, BatteryService::class.java)
-                startService(battery)
-                batterServiceLaunched = true
-
-                Batbutton.text = "Stop Battery Service"
-
-
-            }else{
-                Batbutton.text = "Launch Battery Service"
-
-                stopService(battery)
-
-                batterServiceLaunched = false
-
-            }
-        }
 
         Allbutton.setOnClickListener {
             launchedAll = true
@@ -197,17 +177,13 @@ class MainActivity : AppCompatActivity(){
             startService(serviceFall)
             activityRecognition = Intent(this, ActivityRecognitionService::class.java)
             startService(activityRecognition)
-            battery = Intent(this, BatteryService::class.java)
-            startService(battery)
             Toast.makeText(this, "All services launched", Toast.LENGTH_LONG).show()
 
-            Batbutton.text = "Stop Battery Service"
             Shakebutton.text = "Stop shake detection"
 
             Locbutton.text = "Stop Localisation"
             Fallbutton.text = "Stop Fall Detection"
             ARbutton.text = "Stop Activity Recognition"
-            batterServiceLaunched = true
             activityRecognitionLaunched = true
             serviceFallLaunched = true
             serviceLocalisationLaunched = true
@@ -253,7 +229,6 @@ class MainActivity : AppCompatActivity(){
         stopService(serviceFall)
         stopService(serviceShake)
         stopService(activityRecognition)
-        stopService(battery)
     }
 
 
