@@ -1,9 +1,14 @@
 package com.team8.safetrip
 
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.media.AudioManager
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.Gravity
+import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
@@ -17,6 +22,7 @@ import org.json.JSONObject
 
 class AlertActivity : AppCompatActivity() {
 
+    private lateinit var mAudioManager : AudioManager
     private lateinit var mp : MediaPlayer
     private lateinit var data : Data
     private lateinit var pass : String
@@ -43,6 +49,26 @@ class AlertActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alert)
         created = true
+
+
+        if(!MainActivity.debugNoVolume) {
+
+            mAudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && notificationManager.isNotificationPolicyAccessGranted) {
+                mAudioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+            }
+            var maxVolume: Int = mAudioManager!!.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            mAudioManager.setStreamVolume(
+                AudioManager.STREAM_MUSIC,
+                maxVolume,
+                AudioManager.FLAG_SHOW_UI
+            )
+
+
+        }
+
         mp = MediaPlayer.create(this, R.raw.alarm)
         mp.isLooping = true
         data = Data().loadData()
@@ -58,7 +84,7 @@ class AlertActivity : AppCompatActivity() {
             }
 
         }
-        if(!mp.isPlaying) mp!!.start()
+        //if(!mp.isPlaying) mp!!.start()
 
 
         setTimer()

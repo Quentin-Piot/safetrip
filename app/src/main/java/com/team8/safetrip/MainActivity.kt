@@ -2,13 +2,11 @@ package com.team8.safetrip
 
 
 import android.Manifest
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -52,6 +50,9 @@ class MainActivity : AppCompatActivity(){
         var batterServiceLaunched = false
 
 
+        var debugNoVolume = false
+
+
 
 
     }
@@ -62,8 +63,26 @@ class MainActivity : AppCompatActivity(){
         activityLaunched = true
         setContentView(R.layout.activity_main)
         setupPermissions()
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !notificationManager.isNotificationPolicyAccessGranted) {
+            val alertDialog = AlertDialog.Builder(this).create()
+            alertDialog.setTitle("Allow the access to notification policy")
+            alertDialog.setMessage("In order to be able to ring when the phone is in silence mode, you need to accept the access to notification policy")
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
+            ) { dialog, _ -> dialog.dismiss()
+                val intent = Intent(
+                    android.provider.Settings
+                        .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+
+                startActivity(intent)
+            }
+            alertDialog.show()
+
+        }
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/alert")
         Thread.setDefaultUncaughtExceptionHandler(onRuntimeError)
+
 
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
@@ -178,6 +197,9 @@ class MainActivity : AppCompatActivity(){
         }
 
 
+        checkBoxVolume.setOnClickListener {
+            debugNoVolume = checkBoxVolume.isChecked
+        }
 
 
 
@@ -256,7 +278,8 @@ class MainActivity : AppCompatActivity(){
                 Manifest.permission.SEND_SMS,
                 Manifest.permission.READ_CONTACTS,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY
             ),
             1
         )
@@ -270,7 +293,7 @@ class MainActivity : AppCompatActivity(){
         when (requestCode) {
             1 -> {
 
-                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED || grantResults[2] != PackageManager.PERMISSION_GRANTED || grantResults[3] != PackageManager.PERMISSION_GRANTED || grantResults[4] != PackageManager.PERMISSION_GRANTED || grantResults[5] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED || grantResults[2] != PackageManager.PERMISSION_GRANTED || grantResults[3] != PackageManager.PERMISSION_GRANTED || grantResults[4] != PackageManager.PERMISSION_GRANTED || grantResults[5] != PackageManager.PERMISSION_GRANTED || grantResults[6] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(applicationContext, "Please accept all permissions", Toast.LENGTH_SHORT).show()
 
                     setupPermissions()

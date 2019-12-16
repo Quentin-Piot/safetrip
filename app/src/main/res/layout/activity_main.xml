@@ -33,7 +33,7 @@
         android:id="@+id/locationT"
         android:layout_width="900px"
         android:layout_height="160px"
-        android:layout_marginBottom="112dp"
+        android:layout_marginBottom="204dp"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +41,8 @@
 
     <ScrollView
         android:id="@+id/scrollView3"
-        android:layout_width="350dp"
-        android:layout_height="150dp"
+        android:layout_width="352dp"
+        android:layout_height="78dp"
         android:fadeScrollbars="false"
 
         android:scrollbars="vertical"
@@ -63,7 +63,6 @@
                 android:layout_marginTop="28dp"
                 android:fadeScrollbars="false"
                 android:scrollbars="vertical"
-                android:text="Logs"
 
                 android:textSize="14sp" />
         </LinearLayout>
@@ -71,8 +70,8 @@
 
     <TextView
         android:id="@+id/currentAct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="1dp"
+        android:layout_height="16dp"
         android:layout_marginTop="28dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/locationT"
@@ -137,6 +136,27 @@
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="@+id/Batbutton"
         app:layout_constraintTop_toBottomOf="@+id/Batbutton" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="72dp"
+        android:text="Developper Mode : "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationT" />
+
+    <CheckBox
+        android:id="@+id/checkBoxVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:checked="false"
+        android:text="Desactive Sound"
+        app:layout_constraintBottom_toBottomOf="@+id/textView8"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="@+id/textView8" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
