@@ -63,8 +63,8 @@ class MainActivity : AppCompatActivity(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !notificationManager.isNotificationPolicyAccessGranted) {
             val alertDialog = AlertDialog.Builder(this).create()
-            alertDialog.setTitle("Allow the access to notification policy")
-            alertDialog.setMessage("In order to be able to ring when the phone is in silence mode, you need to accept the access to notification policy")
+            alertDialog.setTitle("Allow access to notification policy")
+            alertDialog.setMessage("In order to be able to hear the notification when someone nearby is attacked, even if your phone is on silent mode, you need to accept the access notification policy")
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
             ) { dialog, _ -> dialog.dismiss()
                 val intent = Intent(
@@ -192,7 +192,6 @@ class MainActivity : AppCompatActivity(){
 
 
     }
-
 
 
 
