@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.telephony.SmsManager
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
@@ -278,19 +279,14 @@ class AlertActivity : AppCompatActivity() {
 
     private fun contactRelatives() {
 
-        val toast = Toast.makeText(this, "${listNumber.size} relatives contacted", Toast.LENGTH_LONG)
+        val toast = Toast.makeText(this, "${listNumber.size} Contacts notified", Toast.LENGTH_LONG)
 
-
-        //Couldn't try that because of our european mobile phone plans
-        /*
-        for(i in 0 until listNumber.size-1){
+        for(i in 0 until listNumber.size){
             if(listNumber[i] != "") {
-                sendSMS(listNumber[i], "I have been agressed here : latitude : ${LocalisationService.latitude}, longitude : ${LocalisationService.longitude}, can you help me ?")
+                sendSMS(listNumber[i], "I have been attacked and need help! ${LocalisationService.location}")
             }
 
         }
-
-        */
 
         toast.show()
         sendNotification()
