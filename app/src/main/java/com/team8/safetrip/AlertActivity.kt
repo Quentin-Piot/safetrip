@@ -84,7 +84,7 @@ class AlertActivity : AppCompatActivity() {
             }
 
         }
-        //if(!mp.isPlaying) mp!!.start()
+        if(!mp.isPlaying && !MainActivity.debugNoVolume) mp!!.start()
 
 
         setTimer()
