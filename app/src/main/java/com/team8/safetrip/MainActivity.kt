@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !notificationManager.isNotificationPolicyAccessGranted) {
             val alertDialog = AlertDialog.Builder(this).create()
             alertDialog.setTitle("Allow access to silent mode")
-            alertDialog.setMessage("In order to be able to hear the notification when someone nearby is attacked, even if your phone is on silent mode, you need to give the application access to your silent mode")
+            alertDialog.setMessage("Some phones may need to give the application access to your silent mode, in order for the alarm to be audible")
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
             ) { dialog, _ -> dialog.dismiss()
                 val intent = Intent(
