@@ -24,6 +24,7 @@ import android.widget.TextView
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import java.io.File
 import java.util.*
 
 
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity(){
         activityLaunched = true
         setContentView(R.layout.activity_main)
         setupPermissions()
+
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !notificationManager.isNotificationPolicyAccessGranted) {
@@ -99,27 +101,23 @@ class MainActivity : AppCompatActivity(){
                 serviceLocalisationLaunched = false
                 Locbutton.text = "Launch Localisation"
 
-
-
             }
         }
 
 
         Fallbutton.setOnClickListener {
             if(FallService.INSTANCE == null){
+                checkDataDir()
                 serviceFall = Intent(this, FallService::class.java)
                 serviceStarted()
                 serviceFallLaunched = true
                 startService(serviceFall)
                 Fallbutton.text = "Stop Fall Detection"
 
-
             }else{
                 serviceFallLaunched = false
                 Fallbutton.text = "Launch Fall Detection"
                 stopService(serviceFall)
-
-
                 serviceStarted()
 
             }
@@ -129,6 +127,7 @@ class MainActivity : AppCompatActivity(){
 
 
         ARbutton.setOnClickListener {
+            checkDataDir()
             if(ActivityRecognitionService.INSTANCE == null){
                 activityRecognition = Intent(this, ActivityRecognitionService::class.java)
                 startService(activityRecognition)
@@ -150,6 +149,7 @@ class MainActivity : AppCompatActivity(){
 
 
         Allbutton.setOnClickListener {
+            checkDataDir()
             launchedAll = true
             serviceLocalisation = Intent(this, LocalisationService::class.java)
             startService(serviceLocalisation)
@@ -362,8 +362,18 @@ class MainActivity : AppCompatActivity(){
         mNotificationManager.notify(1, mBuilder.build())
     }
 
+    private fun checkDataDir() {
+        val dataObj = Data()
+        val dirPath = "sdcard/safetrip"
 
-
+        val dirFile = File(dirPath)
+        if (!dirFile.exists()) {
+            dirFile.mkdirs()
+            dataObj.contactList = arrayListOf("", "", "")
+            dataObj.password = "0000"
+            dataObj.saveData()
+        }
+    }
 
 
 
