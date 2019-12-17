@@ -84,7 +84,7 @@
         android:layout_width="250sp"
         android:layout_height="40sp"
         android:layout_marginTop="16dp"
-        android:text="Launch Activity REcognition"
+        android:text="Launch Vehicle Recognition"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +95,7 @@
         android:layout_width="250sp"
         android:layout_height="40sp"
         android:layout_marginTop="5dp"
-        android:text="Launch Localisation"
+        android:text="Launch GPS Tracking"
         app:layout_constraintStart_toStartOf="@+id/Fallbutton"
         app:layout_constraintTop_toBottomOf="@+id/Fallbutton" />
 
@@ -104,7 +104,7 @@
         android:layout_width="250sp"
         android:layout_height="40sp"
         android:layout_marginTop="5dp"
-        android:text="Launch Fall Detection"
+        android:text="Launch Assault Recognition"
         app:layout_constraintStart_toStartOf="@+id/ARbutton"
         app:layout_constraintTop_toBottomOf="@+id/ARbutton" />
 

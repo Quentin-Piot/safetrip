@@ -50,8 +50,6 @@ class MainActivity : AppCompatActivity(){
         var debugNoVolume = false
 
 
-
-
     }
 
 
@@ -95,11 +93,11 @@ class MainActivity : AppCompatActivity(){
                 startService(serviceLocalisation)
                 serviceLocalisationLaunched = true
 
-                Locbutton.text = "Stop Localisation"
+                Locbutton.text = "Stop GPS Tracking"
             }else{
                 stopService(serviceLocalisation)
                 serviceLocalisationLaunched = false
-                Locbutton.text = "Launch Localisation"
+                Locbutton.text = "Launch GPS Tracking"
 
             }
         }
@@ -112,19 +110,16 @@ class MainActivity : AppCompatActivity(){
                 serviceStarted()
                 serviceFallLaunched = true
                 startService(serviceFall)
-                Fallbutton.text = "Stop Fall Detection"
+                Fallbutton.text = "Stop Assault Recognition"
 
             }else{
                 serviceFallLaunched = false
-                Fallbutton.text = "Launch Fall Detection"
+                Fallbutton.text = "Launch Assault Recognition"
                 stopService(serviceFall)
                 serviceStarted()
 
             }
         }
-
-
-
 
         ARbutton.setOnClickListener {
             checkDataDir()
@@ -134,19 +129,17 @@ class MainActivity : AppCompatActivity(){
                 serviceStarted()
                 activityRecognitionLaunched = true
 
-                ARbutton.text = "Stop Activity Recognition"
+                ARbutton.text = "Stop Vehicle Recognition"
 
 
             }else{
                 stopService(activityRecognition)
                 activityRecognitionLaunched = false
-                ARbutton.text = "Launch Activity Recognition"
+                ARbutton.text = "Launch Vehicle Recognition"
                 serviceStarted()
 
             }
         }
-
-
 
         Allbutton.setOnClickListener {
             checkDataDir()
@@ -160,9 +153,9 @@ class MainActivity : AppCompatActivity(){
             Toast.makeText(this, "All services launched", Toast.LENGTH_LONG).show()
 
 
-            Locbutton.text = "Stop Localisation"
-            Fallbutton.text = "Stop Fall Detection"
-            ARbutton.text = "Stop Activity Recognition"
+            Locbutton.text = "Stop GPS Tracking"
+            Fallbutton.text = "Stop Assault Recognition"
+            ARbutton.text = "Stop Vehicle Recognition"
             activityRecognitionLaunched = true
             serviceFallLaunched = true
             serviceLocalisationLaunched = true
@@ -174,13 +167,8 @@ class MainActivity : AppCompatActivity(){
             debugNoVolume = checkBoxVolume.isChecked
         }
 
-
-
         val messagingService = Intent(this, MyFirebaseMessagingService::class.java)
         startService(messagingService)
-
-
-
 
         settingsButton.setOnClickListener {
 
@@ -190,10 +178,7 @@ class MainActivity : AppCompatActivity(){
 
         }
 
-
     }
-
-
 
     override  fun onStop(){
         super.onStop()
@@ -276,8 +261,6 @@ class MainActivity : AppCompatActivity(){
     }
 
 
-
-
     private fun launchAlarm(){
         if(!AlertActivity.created) {
             val intent = Intent(this, AlertActivity::class.java)
@@ -326,7 +309,7 @@ class MainActivity : AppCompatActivity(){
 
         }else if(!serviceFallLaunched && !activityRecognitionLaunched){
                 detectionServiceLaunched = false
-                Toast.makeText(this,"No detection service is running anymore",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"No recognition service is running anymore",Toast.LENGTH_SHORT).show()
                 val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 mNotificationManager.cancel(1)
 
@@ -374,9 +357,6 @@ class MainActivity : AppCompatActivity(){
             dataObj.saveData()
         }
     }
-
-
-
 }
 
 
